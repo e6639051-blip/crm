@@ -1,0 +1,2091 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>客户建档全流程</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#EEF1F6; --surface:#FFFFFF; --surface-2:#F7F9FC; --surface-3:#EFF3F9;
+  --line:#E3E8F0; --line-2:#CBD5E4;
+  --text:#1B2436; --text-2:#5A6883; --text-3:#95A2B9;
+  --accent:#1F6FEB; --accent-2:#1558C4; --accent-weak:#EAF2FE;
+  --nav:#151F35; --nav-2:#1E2A45; --nav-text:#C3CBDB; --nav-text-2:#8794AE;
+  --ok:#12A150; --ok-weak:#E7F7EE; --warn:#B4700A; --warn-weak:#FCF3E2;
+  --danger:#D2373A; --danger-weak:#FCEBEB; --agent:#6949DC; --agent-weak:#EFEBFD;
+  --mask:rgba(21,31,53,.45);
+  --sh-1:0 1px 2px rgba(21,31,53,.06),0 0 0 1px rgba(21,31,53,.04);
+  --sh-2:0 12px 32px -8px rgba(21,31,53,.22),0 0 0 1px rgba(21,31,53,.06);
+  --r:4px; --r-lg:8px;
+  --sans:"IBM Plex Sans","PingFang SC","Microsoft YaHei",system-ui,sans-serif;
+  --mono:"IBM Plex Mono","PingFang SC",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0D1320; --surface:#151D2C; --surface-2:#1B2434; --surface-3:#212B3D;
+    --line:#2A3547; --line-2:#3A4760;
+    --text:#E6EBF4; --text-2:#9FADC4; --text-3:#71809A;
+    --accent:#4F92FF; --accent-2:#6BA4FF; --accent-weak:#17273F;
+    --nav:#0A1120; --nav-2:#16203300; --nav-text:#AEBACE; --nav-text-2:#75839C;
+    --ok:#3BC47C; --ok-weak:#12291E; --warn:#E0A040; --warn-weak:#2C2314;
+    --danger:#F07070; --danger-weak:#2E1A1C; --agent:#A08BF5; --agent-weak:#211A3B;
+    --mask:rgba(4,8,16,.6);
+    --sh-1:0 1px 2px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.05);
+    --sh-2:0 16px 40px -10px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.07);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0D1320; --surface:#151D2C; --surface-2:#1B2434; --surface-3:#212B3D;
+  --line:#2A3547; --line-2:#3A4760;
+  --text:#E6EBF4; --text-2:#9FADC4; --text-3:#71809A;
+  --accent:#4F92FF; --accent-2:#6BA4FF; --accent-weak:#17273F;
+  --nav:#0A1120; --nav-2:#162033; --nav-text:#AEBACE; --nav-text-2:#75839C;
+  --ok:#3BC47C; --ok-weak:#12291E; --warn:#E0A040; --warn-weak:#2C2314;
+  --danger:#F07070; --danger-weak:#2E1A1C; --agent:#A08BF5; --agent-weak:#211A3B;
+  --mask:rgba(4,8,16,.6);
+  --sh-1:0 1px 2px rgba(0,0,0,.4),0 0 0 1px rgba(255,255,255,.05);
+  --sh-2:0 16px 40px -10px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.07);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--text);font:400 13px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{margin:0;font-weight:600;text-wrap:balance}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+/* ---------- shell ---------- */
+.app{min-height:100vh}
+.pane{display:flex;flex-direction:column;min-width:0;min-height:100vh}
+.topbar{display:flex;align-items:center;gap:14px;height:52px;padding:0 16px;background:var(--nav);color:#fff;flex:none}
+.burger{width:26px;height:26px;border:0;background:transparent;color:var(--nav-text);display:grid;place-items:center;border-radius:var(--r)}
+.brand{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;letter-spacing:.01em}
+.brand .mark{display:grid;place-items:center;width:24px;height:24px;border-radius:5px;background:var(--accent);font-size:9px;font-weight:600;letter-spacing:.04em}
+.topbar .sp{margin-left:auto}
+.chipnav{display:flex;align-items:center;gap:5px;padding:3px 9px;border:1px solid rgba(255,255,255,.18);border-radius:100px;color:var(--nav-text);font-size:12px;background:transparent}
+.avatar{display:flex;align-items:center;gap:7px;color:var(--nav-text);font-size:12px}
+.avatar i{display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--agent);color:#fff;font-size:11px;font-weight:600;font-style:normal}
+.body{display:grid;grid-template-columns:210px 1fr;flex:1;min-height:0}
+.side{background:var(--surface);border-right:1px solid var(--line);padding:8px 0;overflow:auto}
+.side ul{list-style:none;margin:0;padding:0}
+.nav-i{display:flex;align-items:center;gap:9px;width:100%;padding:8px 14px;border:0;background:transparent;color:var(--text-2);font-size:12.5px;text-align:left;border-left:2px solid transparent}
+.nav-i:hover{background:var(--surface-2);color:var(--text)}
+.nav-i[aria-current="true"]{background:var(--accent-weak);color:var(--accent);border-left-color:var(--accent);font-weight:500}
+.nav-i .ic{flex:none;width:14px;text-align:center;opacity:.75}
+.nav-i .caret{margin-left:auto;color:var(--text-3);font-size:9px}
+.sub{padding:2px 0 4px}
+.sub button{display:block;width:100%;padding:6px 14px 6px 37px;border:0;background:transparent;color:var(--text-2);font-size:12.5px;text-align:left}
+.sub button:hover{color:var(--text);background:var(--surface-2)}
+.sub button[aria-current="true"]{color:var(--accent);font-weight:500;background:var(--accent-weak)}
+.main{overflow:auto;padding:14px 16px 22px;min-width:0}
+
+/* ---------- tabs / filter / table ---------- */
+.tabs{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:12px;overflow-x:auto}
+.tab{padding:7px 13px;border:1px solid transparent;border-bottom:0;background:transparent;color:var(--text-2);font-size:12.5px;white-space:nowrap;border-radius:var(--r) var(--r) 0 0;margin-bottom:-1px}
+.tab[aria-selected="true"]{background:var(--surface);border-color:var(--line);color:var(--accent);font-weight:500}
+.tabnav{padding:9px 15px;border:0;background:var(--surface-2);color:var(--text-2);font-size:12.5px;flex:1;white-space:nowrap}
+.tabnav.on{background:var(--surface);color:var(--accent);font-weight:500}
+.tabnav:hover{background:var(--surface);color:var(--text)}
+.tab-pane{display:none}
+.tab-pane.on{display:block}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-1)}
+.filter{padding:12px 14px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr)) 92px;gap:10px 16px;align-items:start}
+.f{display:grid;grid-template-columns:62px 1fr;align-items:center;gap:8px;min-width:0}
+.f>span{color:var(--text-2);font-size:12.5px;text-align:right}
+.fbtns{display:grid;gap:5px;justify-items:end}
+label.lbl{display:block;margin-bottom:5px;color:var(--text-2);font-size:12.5px}
+label.lbl.req::before{content:"*";color:var(--danger);margin-right:3px}
+.inp,.sel{width:100%;height:30px;padding:0 9px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);color:var(--text);font:inherit}
+.inp:disabled,.sel:disabled{opacity:1;background:var(--surface-2);color:var(--text-2);cursor:not-allowed}
+.sel{appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--text-3) 50%),linear-gradient(135deg,var(--text-3) 50%,transparent 50%);background-position:calc(100% - 14px) 13px,calc(100% - 9px) 13px;background-size:5px 5px;background-repeat:no-repeat;padding-right:26px}
+.inp::placeholder{color:var(--text-3)}
+.inp:focus,.sel:focus,.ta:focus{border-color:var(--accent);outline:0;box-shadow:0 0 0 2px var(--accent-weak)}
+.ta{width:100%;min-height:74px;padding:7px 9px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);color:var(--text);font:inherit;resize:vertical}
+.inp.bad,.sel.bad,.ta.bad{border-color:var(--danger);box-shadow:0 0 0 2px var(--danger-weak)}
+.err{display:none;margin-top:4px;color:var(--danger);font-size:11.5px}
+.bad~.err,.err.on{display:block}
+.btn{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 13px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);color:var(--text);font-size:12.5px;white-space:nowrap}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.pri:hover{background:var(--accent-2);border-color:var(--accent-2);color:#fff}
+.btn.sm{height:26px;padding:0 10px;font-size:12px}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.btn.link{border:0;background:transparent;color:var(--accent);padding:0;height:auto}
+.toolbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:11px 14px;border-bottom:1px solid var(--line)}
+.tblwrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font:400 12.5px/1.55 var(--sans)}
+th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{background:var(--surface-2);color:var(--text-2);font-weight:500;position:sticky;top:0}
+td.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12px;color:var(--text-2)}
+tbody tr:hover{background:var(--surface-2)}
+tbody tr.fresh{background:var(--ok-weak);animation:pop 2.4s ease-out}
+@keyframes pop{0%{background:var(--accent-weak)}100%{background:var(--ok-weak)}}
+.pill{display:inline-block;padding:1px 7px;border-radius:3px;font-size:11.5px;font-weight:500;line-height:1.5}
+.pill.direct{background:var(--ok-weak);color:var(--ok)}
+.pill.agent{background:var(--agent-weak);color:var(--agent)}
+.dot{display:inline-flex;align-items:center;gap:5px;color:var(--text-2)}
+.dot::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--line-2)}
+.dot.a::before{background:var(--ok)}.dot.a{color:var(--ok)}
+.dot.b::before{background:var(--warn)}.dot.b{color:var(--warn)}
+.dot.c::before{background:var(--text-3)}
+.pager{display:flex;align-items:center;gap:8px;justify-content:flex-end;padding:10px 14px;color:var(--text-2);font-size:12.5px;flex-wrap:wrap}
+.pg{min-width:26px;height:26px;padding:0 6px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface);color:var(--text-2);font-size:12px;font-family:var(--mono)}
+.pg[aria-current="true"]{border-color:var(--accent);color:var(--accent)}
+/* ---------- modal ---------- */
+.mask{position:fixed;inset:0;background:var(--mask);display:none;z-index:40;align-items:flex-start;justify-content:center;padding:44px 16px;overflow:auto}
+.mask.on{display:flex}
+.mask.right{padding:0;justify-content:flex-end;align-items:stretch}
+.modal{width:100%;max-width:660px;background:var(--surface);border-radius:var(--r-lg);box-shadow:var(--sh-2);display:flex;flex-direction:column;max-height:100%;animation:up .18s ease-out}
+.modal.drawer{max-width:600px;border-radius:0;height:100vh;max-height:100vh;animation:slide .2s ease-out}
+.modal.slim{max-width:414px}
+.modal.wide{max-width:1360px;width:94vw}
+@keyframes up{from{opacity:0;transform:translateY(-8px)}}
+@keyframes slide{from{transform:translateX(24px);opacity:.4}}
+.mhead{display:flex;align-items:baseline;gap:9px;padding:14px 18px;border-bottom:1px solid var(--line);flex:none}
+.mhead h3{font-size:15px}
+.mhead .hint{color:var(--text-3);font-size:12px}
+.x{margin-left:auto;border:0;background:transparent;color:var(--text-3);font-size:16px;line-height:1;padding:2px 4px;border-radius:var(--r)}
+.x:hover{color:var(--text);background:var(--surface-3)}
+.mbody{padding:16px 18px;overflow:auto;flex:1}
+.mfoot{display:flex;align-items:center;gap:8px;justify-content:flex-end;padding:12px 18px;border-top:1px solid var(--line);background:var(--surface-2);flex:none;border-radius:0 0 var(--r-lg) var(--r-lg)}
+.drawer .mfoot{border-radius:0}
+.mfoot .left{margin-right:auto;color:var(--text-3);font-size:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px}
+.grid2>.full{grid-column:1/-1}
+.note{padding:14px;border-radius:var(--r);background:var(--surface-2);color:var(--text-2);font-size:12.5px;line-height:1.6}
+.note.w{background:var(--warn-weak);color:var(--warn);border:1px solid var(--warn)}
+.note.i{background:var(--surface-2);color:var(--text-3)}
+.biz-card{position:relative;display:block;cursor:pointer;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);transition:all .15s}
+.biz-card:hover{border-color:var(--accent);background:var(--accent-weak)}
+.biz-card input[type="checkbox"]{position:absolute;opacity:0}
+.biz-card input:checked+.biz-card-inner{border-color:var(--accent);background:var(--accent-weak)}
+.biz-card input:checked+.biz-card-inner::after{content:"✓";position:absolute;top:6px;right:6px;width:16px;height:16px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;display:grid;place-items:center}
+.biz-card-inner{position:relative;padding:14px 12px;border-radius:var(--r);transition:all .15s}
+.biz-card-name{font-size:14px;font-weight:600;color:var(--text);margin-bottom:5px}
+.biz-card-desc{font-size:11.5px;color:var(--text-2);line-height:1.5}
+.sechead{display:flex;align-items:center;gap:8px;margin:22px 0 12px;padding-top:16px;border-top:1px solid var(--line)}
+.sechead:first-child{margin-top:0;padding-top:0;border-top:0}
+.sechead h4{font-size:13.5px}
+.sechead .n{display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--surface-3);color:var(--text-2);font-family:var(--mono);font-size:10.5px}
+.radios{display:flex;flex-wrap:wrap;gap:6px 16px;padding-top:3px}
+.radios label{display:inline-flex;align-items:center;gap:5px;color:var(--text);font-size:12.5px;cursor:pointer}
+.radios input{accent-color:var(--accent);margin:0}
+.empty{display:grid;place-items:center;gap:9px;padding:30px 0;color:var(--text-3);font-size:12.5px}
+.empty svg{opacity:.9}
+.chk{width:14px;height:14px;accent-color:var(--accent);margin:0}
+
+/* ---------- toast / confirm ---------- */
+.toasts{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:80;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none}
+.toast{display:flex;align-items:center;gap:8px;padding:9px 15px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-2);font-size:12.5px;animation:up .16s ease-out}
+.toast .i{flex:none;display:grid;place-items:center;width:16px;height:16px;border-radius:50%;color:#fff;font-size:10px;font-weight:600}
+.toast.ok .i{background:var(--ok)}.toast.err .i{background:var(--danger)}.toast.warn .i{background:var(--warn)}.toast.info .i{background:var(--accent)}
+.toast .mono{font-family:var(--mono);font-size:12px}
+.kv{display:grid;grid-template-columns:76px 1fr;gap:7px 12px;font-size:12.5px;margin-top:14px}
+.kv dt{color:var(--text-2)}
+.kv dd{margin:0}
+.kv dd.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---------- 模拟开关浮层 ---------- */
+.sim{position:fixed;right:14px;bottom:14px;z-index:30;width:250px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-2);overflow:hidden}
+.sim>summary{display:flex;align-items:center;gap:7px;padding:9px 12px;cursor:pointer;font-size:12px;color:var(--text-2);list-style:none}
+.sim>summary::-webkit-details-marker{display:none}
+.sim>summary::before{content:"⚙";color:var(--text-3)}
+.sim>summary::after{content:"▾";margin-left:auto;color:var(--text-3);font-size:10px}
+.sim[open]>summary{border-bottom:1px solid var(--line);background:var(--surface-2)}
+.sim[open]>summary::after{content:"▴"}
+.sim .in{padding:10px 12px 12px}
+.sim .row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sim .row+.row{margin-top:9px}
+.sim .row span{font-size:12px;color:var(--text-2)}
+.seg{display:flex;border:1px solid var(--line-2);border-radius:var(--r);overflow:hidden;flex:none}
+.seg button{border:0;background:var(--surface);color:var(--text-2);font-size:11.5px;padding:3px 8px}
+.seg button+button{border-left:1px solid var(--line-2)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.seg button[aria-pressed="true"].bad{background:var(--danger)}
+.seg button[aria-pressed="true"].wr{background:var(--warn)}
+.sim .reset{width:100%;margin-top:11px;justify-content:center}
+.ops{white-space:nowrap}
+.ops .btn.link+.btn.link{margin-left:10px;padding-left:10px;border-left:1px solid var(--line-2)}
+
+/* ---------- 抽屉 ---------- */
+.drawer{width:640px;max-width:94vw;height:100vh;background:var(--surface);display:flex;flex-direction:column;box-shadow:-2px 0 12px rgba(0,0,0,.15);animation:slideIn .24s ease-out}
+@keyframes slideIn{from{transform:translateX(100%)}}
+.drawer .mbody{flex:1;overflow:auto}
+.sect{margin-bottom:28px}
+.sect:last-child{margin-bottom:0}
+.sect-t{font-size:14px;font-weight:600;color:var(--text);margin:0 0 14px 0;padding-bottom:8px;border-bottom:1px solid var(--line-2)}
+.sect-b{}
+
+/* ---------- 多页切换 ---------- */
+.page{display:none}
+.page.on{display:block}
+
+/* ---------- 审批工单 ---------- */
+.wbar{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--surface-2);border-bottom:1px solid var(--line);flex-wrap:wrap}
+.wbar .sp{margin-left:auto}
+.wbar .cnt{color:var(--text-2);font-size:12px;font-variant-numeric:tabular-nums}
+.ibtn{display:grid;place-items:center;width:28px;height:28px;border:1px solid transparent;border-radius:var(--r);background:transparent;color:var(--text-2);font-size:14px}
+.ibtn:hover{border-color:var(--line-2);color:var(--text);background:var(--surface)}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.ok:hover{background:#0E8A44;border-color:#0E8A44;color:#fff}
+.btn.no{background:var(--danger);border-color:var(--danger);color:#fff}
+.btn.no:hover{background:#B82E31;border-color:#B82E31;color:#fff}
+tr.pending{background:#FDEBD2}
+tr.pending:hover{background:#FBDFB8}
+tr.pending td{color:#7A4B06}
+:root[data-theme="dark"] tr.pending,
+:root[data-theme="dark"] tr.pending:hover{background:#3A2A10}
+:root[data-theme="dark"] tr.pending td{color:#E5B876}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) tr.pending,
+  :root:not([data-theme="light"]) tr.pending:hover{background:#3A2A10}
+  :root:not([data-theme="light"]) tr.pending td{color:#E5B876}
+}
+tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
+.srow input,.srow select{height:26px;font-size:12px}
+.srow td{background:var(--surface);padding:5px 8px}
+
+/* ---------- 审批详情 ---------- */
+.quote{display:flex;gap:10px;padding:13px 16px;background:var(--accent-weak);border-radius:var(--r);color:var(--text);font-size:12.5px;line-height:1.6}
+.quote::before{content:"❝";color:var(--accent);font-size:15px;line-height:1;flex:none}
+.blk{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);box-shadow:var(--sh-1);margin-bottom:12px}
+.blk-t{padding:12px 16px;border-bottom:1px solid var(--line);font-size:13.5px;font-weight:600}
+.blk-b{padding:16px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 20px}
+.fld{min-width:0}
+.fld>dt{color:var(--text-2);font-size:12px;margin-bottom:5px}
+.fld>dd{margin:0;font-size:12.5px;color:var(--text)}
+.fld>dd.lk{color:var(--accent)}
+.fld>dd.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.ro{padding:7px 10px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r);font-size:12.5px;min-height:34px}
+.flow{display:flex;flex-wrap:wrap;gap:3px}
+.stp{position:relative;padding:5px 16px 5px 20px;background:var(--surface-3);color:var(--text-3);font-size:12px;clip-path:polygon(0 0,calc(100% - 9px) 0,100% 50%,calc(100% - 9px) 100%,0 100%,9px 50%)}
+.stp:first-child{padding-left:12px;clip-path:polygon(0 0,calc(100% - 9px) 0,100% 50%,calc(100% - 9px) 100%,0 100%)}
+.stp.on{background:var(--accent);color:#fff;font-weight:500}
+.stp.done{background:var(--accent-weak);color:var(--accent)}
+
+/* ---------- 客户合并 ---------- */
+.mgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 24px}
+.mg-f{min-width:0}
+.mg-f>label{display:block;color:var(--text-2);font-size:12px;margin-bottom:5px}
+.mg-f>label.req::after{content:"*";color:var(--danger);margin-left:2px}
+.mg-f>label .sub-t{color:var(--text-3);font-weight:400}
+.mg-f>label .sub-t.old{color:var(--danger)}
+.mg-f>label .sub-t.new{color:var(--ok)}
+.srch{position:relative}
+.srch .inp{padding-right:30px}
+.srch .ic{position:absolute;right:9px;top:50%;transform:translateY(-50%);color:var(--text-3);font-size:13px;pointer-events:none}
+.pick{display:flex;gap:8px;flex-wrap:wrap}
+.pick label{display:flex;align-items:center;gap:6px;font-size:12.5px;cursor:pointer;padding:0 11px;height:30px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface)}
+.pick label:hover{border-color:var(--accent);background:var(--accent-weak)}
+.pick input{accent-color:var(--accent);margin:0}
+.pick input:checked+span{color:var(--accent);font-weight:500}
+.diff{color:var(--warn);font-size:11.5px;margin-top:4px;display:none}
+.diff.on{display:block}
+.mg-acts{display:flex;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+
+@media (max-width:560px){.sim{display:none}}
+@media (max-width:1000px){.mg{grid-template-columns:1fr}.mg-col+.mg-col{border-left:0;border-top:1px solid var(--line);padding-top:18px;margin-top:4px}.pick{padding-top:0;flex-direction:row}.grid3{grid-template-columns:1fr 1fr}}
+@media (max-width:820px){.body{grid-template-columns:1fr}.side{display:none}.filter{grid-template-columns:1fr}.fbtns{justify-items:start}.grid2{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}}
+</style>
+<div class="app">
+<div class="pane">
+  <header class="topbar">
+    <button class="burger" aria-label="收起菜单">☰</button>
+    <div class="brand"><span class="mark">BPMS</span>BPMS 2.0</div>
+    <div class="sp"></div>
+    <span class="chipnav">简体中文 ▾</span>
+    <span class="avatar"><i>N</i>UserName ▾</span>
+  </header>
+
+  <div class="body">
+    <nav class="side">
+      <ul>
+        <li><button class="nav-i"><span class="ic">▦</span>工作台</button></li>
+        <li><button class="nav-i"><span class="ic">◱</span>返点对账</button></li>
+        <li><button class="nav-i"><span class="ic">☁</span>TecGO<span class="caret">▾</span></button></li>
+        <li><button class="nav-i"><span class="ic">◉</span>MegaX Studio<span class="caret">▾</span></button></li>
+        <li><button class="nav-i"><span class="ic">✎</span>创意服务中心<span class="caret">▾</span></button></li>
+        <li>
+          <button class="nav-i" aria-current="true"><span class="ic">◧</span>Tec-CRM<span class="caret">▾</span></button>
+          <div class="sub">
+            <button>线索列表</button>
+            <button>拜访管理</button>
+            <button aria-current="true">客户列表</button>
+            <button>客户跟进申请工单</button>
+            <button>CMC商机管理</button>
+            <button>客户资料卡</button>
+            <button>客户围场KPI</button>
+            <button>客户标签管理</button>
+          </div>
+        </li>
+        <li><button class="nav-i"><span class="ic">☰</span>我的列表<span class="caret">▾</span></button></li>
+        <li><button class="nav-i"><span class="ic">☺</span>CRM(客户关系管理)<span class="caret">▾</span></button></li>
+        <li><button class="nav-i"><span class="ic">▤</span>预付系统额度监控<span class="caret">▾</span></button></li>
+        <li><button class="nav-i"><span class="ic">⇄</span>TRM(交易关系管理)<span class="caret">▾</span></button></li>
+        <li><button class="nav-i"><span class="ic">◈</span>SRM(供应商关系管理)<span class="caret">▾</span></button></li>
+        <li><button class="nav-i"><span class="ic">⚑</span>风控中心<span class="caret">▾</span></button></li>
+        <li><button class="nav-i"><span class="ic">◍</span>BPMS标签管理中心<span class="caret">▾</span></button></li>
+        <li><button class="nav-i"><span class="ic">⚙</span>管理<span class="caret">▾</span></button></li>
+      </ul>
+    </nav>
+
+    <main class="main">
+      <div class="tabs" role="tablist">
+        <button class="tab" role="tab" data-go="list" aria-selected="true">客户列表</button>
+        <button class="tab" role="tab" data-go="approval" aria-selected="false">客户跟进申请工单</button>
+        <button class="tab" role="tab" data-go="merge" aria-selected="false">管理员工具箱</button>
+      </div>
+
+      <div class="page on" data-page="list">
+      <section class="card" style="margin-bottom:12px">
+        <div class="filter">
+          <label class="f"><span>客户名称</span><input class="inp" id="q-name" placeholder="请输入客户名称"></label>
+          <label class="f"><span>所属行业</span><select class="sel" id="q-ind"><option>请选择所属行业</option>
+            <optgroup label="文娱">
+              <option>文娱-轻度游戏</option><option>文娱-中重度游戏</option><option>文娱-社交及影音娱乐</option>
+              <option>文娱-工具</option><option>文娱-阅读</option><option>文娱-金融</option><option>文娱-其他</option>
+            </optgroup>
+            <optgroup label="消费">
+              <option>消费-电商平台</option><option>消费-跨境卖家</option><option>消费-行业品牌</option>
+            </optgroup>
+          </select></label>
+          <label class="f"><span>城市</span><select class="sel" id="q-city"><option>请选择城市</option><option>北京</option><option>上海</option><option>广州</option></select></label>
+          <div class="fbtns">
+            <button class="btn pri sm" id="btn-search">⌕ 查询</button>
+            <button class="btn sm" id="btn-reset">↺ 重置</button>
+            <button class="btn link" style="font-size:12px">▽ 高级筛选</button>
+          </div>
+          <label class="f"><span>合作状态</span><select class="sel" id="q-coop"><option>请选择合作状态</option><option>合作中</option><option>未合作</option><option>沉寂半年内</option></select></label>
+          <label class="f"><span>BD</span><select class="sel" id="q-bd"><option>请选择BD</option><option>张三</option><option>李四</option></select></label>
+          <label class="f"><span>CM</span><select class="sel" id="q-cm"><option>请选择CM</option><option>王五</option></select></label>
+          <label class="f"><span>已存档</span><select class="sel" id="q-archived"><option>全部</option><option>已存档</option><option>未存档</option></select></label>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="toolbar">
+          <button class="btn pri" id="btn-create">＋ 创建客户</button>
+          <button class="btn" id="btn-query-status">⌕ 查询客户合作状态</button>
+          <button class="btn">导出</button>
+        </div>
+        <div class="tblwrap">
+          <table>
+            <thead><tr>
+              <th style="width:34px"><input class="chk" type="checkbox" aria-label="全选"></th>
+              <th>编号</th><th>客户名称</th><th>客户别名</th><th>所属行业</th><th>客户类型</th>
+              <th>国家/地区</th><th>城市</th><th>合作状态</th><th>BD</th><th>CM</th><th>创建人</th><th>创建时间</th><th>操作</th>
+            </tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+        <div class="pager">
+          <span>共 <b id="total">50</b> 条</span>
+          <button class="pg">‹</button><button class="pg" aria-current="true">1</button>
+          <button class="pg">2</button><button class="pg">3</button><button class="pg">4</button>
+          <button class="pg">5</button><span>…</span><button class="pg">20</button><button class="pg">›</button>
+          <select class="sel" style="width:96px;height:26px;font-size:12px"><option>10条/页</option><option>20条/页</option></select>
+        </div>
+      </section>
+      </div>
+
+      <!-- ========== 客户跟进申请工单：列表 ========== -->
+      <div class="page" data-page="approval">
+        <section class="card">
+          <div class="wbar">
+            <button class="ibtn" title="更多">▾</button>
+            <button class="ibtn" id="btn-ap-refresh" title="刷新">↻</button>
+            <button class="btn ok" id="btn-ap-pass">✔ 通过</button>
+            <button class="btn no" id="btn-ap-reject">↩ 驳回</button>
+            <div style="display:flex;align-items:center;gap:0;margin-left:6px">
+              <select class="sel" id="ap-scope" style="width:150px;height:28px;font-size:12px;border-radius:var(--r) 0 0 var(--r)">
+                <option>全部申请</option><option>待我审批</option><option>我提交的</option>
+              </select>
+              <button class="ibtn" style="border:1px solid var(--line-2);border-left:0;border-radius:0;width:30px;height:28px" title="清空">⌫</button>
+              <button class="ibtn" style="border:1px solid var(--line-2);border-left:0;border-radius:0 var(--r) var(--r) 0;width:30px;height:28px" title="搜索">⌕</button>
+            </div>
+            <div class="sp"></div>
+            <span class="cnt">从 1 到 <b id="ap-shown">14</b>，共 <b id="ap-total">5327</b></span>
+            <button class="ibtn" title="上一页">‹</button>
+            <button class="ibtn" title="下一页">›</button>
+            <button class="ibtn" title="列表视图">☰</button>
+            <button class="ibtn" title="导出">🗎</button>
+            <button class="ibtn" title="设置">🔧</button>
+          </div>
+          <div class="tblwrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:34px"><input class="chk" type="checkbox" id="ap-all" aria-label="全选"></th>
+                  <th>申请编号</th><th>客户名称</th><th>业务类型</th><th>等级</th><th>跟进人</th>
+                  <th>申请状态</th><th>申请人</th><th>审批人</th><th>申请跟进原因</th><th>驳回原因</th><th>申请时间</th>
+                </tr>
+                <tr class="srow">
+                  <td></td>
+                  <td><input class="inp" id="ap-q-no" placeholder="搜索…"></td>
+                  <td><input class="inp" id="ap-q-name" placeholder="搜索…"></td>
+                  <td><select class="sel" id="ap-q-biz"><option value="">全部</option><option>MTC</option><option>PAC</option><option>VASC-DMC</option><option>VASC-CMC</option><option>VASC-ECP</option></select></td>
+                  <td><select class="sel" id="ap-q-lv"><option value="">全部</option><option>KA</option><option>GT</option><option>LT</option></select></td>
+                  <td></td>
+                  <td><select class="sel" id="ap-q-st"><option value="">全部</option><option>审批中</option><option>审批通过</option><option>驳回</option></select></td>
+                  <td></td><td></td><td></td><td></td><td></td>
+                </tr>
+              </thead>
+              <tbody id="ap-rows"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <!-- ========== 客户跟进申请工单：审批详情 ========== -->
+      <div class="page" data-page="approvalDetail">
+        <section class="card" style="margin-bottom:12px">
+          <div class="wbar">
+            <button class="ibtn" id="btn-ap-back" title="返回列表">↩</button>
+            <button class="ibtn" title="附件">📎</button>
+            <button class="ibtn" title="更多">▾</button>
+            <button class="btn ok" id="btn-d-pass">✔ 通过</button>
+            <button class="btn no" id="btn-d-reject">↩ 驳回</button>
+            <div class="sp"></div>
+            <span class="cnt"><b id="d-idx">1</b>/995</span>
+            <button class="ibtn" id="btn-d-prev" title="上一单">‹</button>
+            <button class="ibtn" id="btn-d-next" title="下一单">›</button>
+            <button class="ibtn" title="列表视图">☰</button>
+          </div>
+          <div style="padding:16px">
+            <div class="quote" id="d-advice"></div>
+          </div>
+        </section>
+
+        <div class="blk">
+          <div class="blk-t">审批信息</div>
+          <div class="blk-b">
+            <div class="grid3">
+              <div class="fld">
+                <dt>申请状态</dt>
+                <dd><div class="flow" id="d-flow"></div></dd>
+              </div>
+              <div class="fld">
+                <dt>活跃状态</dt>
+                <dd><div class="flow" id="d-live"></div></dd>
+              </div>
+              <div class="fld"><dt>申请时间</dt><dd class="mono" id="d-time"></dd></div>
+              <div class="fld"><dt>审批人</dt><dd class="lk" id="d-approver"></dd></div>
+              <div class="fld"><dt>驳回原因</dt><dd id="d-rejreason">—</dd></div>
+              <div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="blk">
+          <div class="blk-t">申请信息</div>
+          <div class="blk-b">
+            <div class="grid3" style="margin-bottom:18px">
+              <div class="fld"><dt>申请编号</dt><dd class="mono" id="d-no"></dd></div>
+              <div class="fld"><dt>客户名称</dt><dd class="lk" id="d-cust"></dd></div>
+              <div class="fld"><dt>业务类型</dt><dd id="d-biz"></dd></div>
+              <div class="fld"><dt>跟进人</dt><dd id="d-follower"></dd></div>
+              <div class="fld"><dt>申请人</dt><dd class="lk" id="d-applicant"></dd></div>
+              <div class="fld"><dt>客户等级</dt><dd id="d-lv"></dd></div>
+            </div>
+            <div style="margin-bottom:14px">
+              <div style="color:var(--text-2);font-size:12px;margin-bottom:5px">你现在跟进到哪一步，请详细说明</div>
+              <div class="ro" id="d-step"></div>
+            </div>
+            <div>
+              <div style="color:var(--text-2);font-size:12px;margin-bottom:5px">你下一步打算怎么做？</div>
+              <div class="ro" id="d-plan"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="blk">
+          <div class="blk-t">历史拜访纪要</div>
+          <div class="blk-b" style="padding:0">
+            <div class="tblwrap">
+              <table>
+                <thead><tr><th>拜访时间</th><th>拜访人</th><th>拜访方式</th><th>对接人</th><th>纪要摘要</th></tr></thead>
+                <tbody id="d-visits"></tbody>
+              </table>
+            </div>
+            <div class="empty" id="d-visits-empty" style="display:none">
+              <svg width="52" height="40" viewBox="0 0 52 40" aria-hidden="true">
+                <rect x="7" y="13" width="38" height="20" rx="3" fill="var(--surface-3)"/>
+                <rect x="12" y="7" width="28" height="10" rx="2" fill="var(--line-2)"/>
+                <rect x="17" y="21" width="18" height="3" rx="1.5" fill="var(--line-2)"/>
+              </svg>
+              近 60 天无拜访记录
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== 管理员工具箱：客户合并 ========== -->
+      <div class="page" data-page="merge">
+        <div class="blk">
+          <div class="blk-t">客户合并</div>
+          <div class="blk-b">
+            <div class="mgrid">
+              <div class="mg-f">
+                <label>旧客户<span class="sub-t old">(这个是不要的)</span></label>
+                <div class="srch"><input class="inp" id="mg-old" placeholder="搜索客户名称或编号"><span class="ic">⌕</span></div>
+                <div class="err" id="mg-old-err">请选择旧客户</div>
+              </div>
+              <div class="mg-f">
+                <label>新客户<span class="sub-t new">（这个是要保留的）</span></label>
+                <div class="srch"><input class="inp" id="mg-new" placeholder="搜索客户名称或编号"><span class="ic">⌕</span></div>
+                <div class="err" id="mg-new-err">请选择新客户</div>
+              </div>
+              <div class="mg-f">
+                <label>取值</label>
+                <div class="pick">
+                  <label><input type="radio" name="mg-pick" value="old"><span>取旧客户值</span></label>
+                  <label><input type="radio" name="mg-pick" value="new"><span>取新客户值</span></label>
+                </div>
+              </div>
+
+              <div class="mg-f">
+                <label class="req">客户类型</label>
+                <select class="sel" id="mg-r-type">
+                  <option value="">请选择</option><option>直客</option><option>代理</option>
+                </select>
+                <div class="diff" id="mg-d-type">⚠ 两侧取值不一致，请确认保留哪一边</div>
+              </div>
+              <div class="mg-f">
+                <label class="req">客户级别类型</label>
+                <select class="sel" id="mg-r-lv">
+                  <option value="">请选择</option><option>KA</option><option>GT</option><option>LT</option>
+                </select>
+                <div class="diff" id="mg-d-lv">⚠ 两侧取值不一致，请确认保留哪一边</div>
+              </div>
+              <div class="mg-f">
+                <label class="req">客户信用等级</label>
+                <select class="sel" id="mg-r-credit">
+                  <option value="">请选择</option><option>A</option><option>B</option><option>C</option><option>D</option>
+                </select>
+                <div class="err" id="mg-credit-err">客户信用等级为必填项</div>
+                <div class="diff" id="mg-d-credit">⚠ 两侧取值不一致，请确认保留哪一边</div>
+              </div>
+
+              <div class="mg-f">
+                <label class="req">所属行业</label>
+                <select class="sel" id="mg-r-ind">
+                  <option value="">请选择</option>
+                  <optgroup label="文娱">
+                    <option>文娱-中重度游戏</option><option>文娱-轻度游戏</option><option>文娱-社交及影音娱乐</option>
+                    <option>文娱-阅读</option><option>文娱-工具</option><option>文娱-金融</option><option>文娱-其他</option>
+                  </optgroup>
+                  <optgroup label="消费">
+                    <option>消费-电商平台</option><option>消费-跨境卖家</option><option>消费-行业品牌</option>
+                  </optgroup>
+                </select>
+                <div class="diff" id="mg-d-ind">⚠ 两侧取值不一致，请确认保留哪一边</div>
+              </div>
+              <div class="mg-f">
+                <label>行业(自定义)</label>
+                <input class="inp" id="mg-r-ind2" placeholder="请输入">
+              </div>
+              <div></div>
+            </div>
+
+            <div class="mg-acts">
+              <button class="btn pri" id="btn-mg-do">合并</button>
+              <button class="btn" id="btn-mg-reset">重置</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<details class="sim">
+  <summary>模拟后端返回</summary>
+  <div class="in">
+    <div class="row"><span>查询相似客户</span>
+      <div class="seg" role="group">
+        <button data-sim="similar" data-v="hit" aria-pressed="true">有相似</button>
+        <button data-sim="similar" data-v="none" aria-pressed="false">无相似</button>
+      </div>
+    </div>
+    <div class="row"><span>创建接口响应</span>
+      <div class="seg" role="group">
+        <button data-sim="api" data-v="ok" aria-pressed="true">成功</button>
+        <button data-sim="api" data-v="dup" aria-pressed="false" class="bad">客户已存在</button>
+        <button data-sim="api" data-v="err" aria-pressed="false" class="bad">系统异常</button>
+      </div>
+    </div>
+    <div class="row"><span>BPMS 同步结果</span>
+      <div class="seg" role="group">
+        <button data-sim="sync" data-v="ok" aria-pressed="true">成功</button>
+        <button data-sim="sync" data-v="fail" aria-pressed="false" class="wr">失败</button>
+      </div>
+    </div>
+    <button class="btn sm reset" id="btn-restart">↺ 重置数据</button>
+  </div>
+</details>
+</div>
+<!-- ===== 1. 客户状态查询 ===== -->
+<div class="mask" id="m-query" role="dialog" aria-modal="true" aria-labelledby="t-query">
+  <div class="modal">
+    <div class="mhead">
+      <h3 id="t-query">客户状态查询</h3>
+      <span class="hint">（创建客户前请先查询是否已在系统）</span>
+      <button class="x" data-close="m-query" aria-label="关闭">✕</button>
+    </div>
+    <div class="mbody">
+      <div style="display:flex;gap:0;max-width:400px">
+        <input class="inp" id="s-name" placeholder="请输入客户名称" style="border-radius:var(--r) 0 0 var(--r)">
+        <button class="btn pri" id="btn-do-search" style="border-radius:0 var(--r) var(--r) 0;margin-left:-1px">⌕ 查询</button>
+      </div>
+      <div class="err" id="s-err">请输入客户名称后再查询</div>
+
+      <div id="s-idle" style="margin-top:20px" class="note i">
+        试试输入 <b>药丸</b>（命中 3 家相似客户）或 <b>星野</b>（无相似客户，可直接创建）。
+      </div>
+
+      <div id="s-hit" style="display:none">
+        <h4 style="margin:20px 0 9px;font-size:13px">相似列表</h4>
+        <div class="tblwrap" style="border:1px solid var(--line);border-radius:var(--r)">
+          <table>
+            <thead><tr>
+              <th>客户名称</th><th>MTC合作状态</th><th>MTC责任BD</th><th>PAC合作状态</th>
+              <th>PAC责任BD</th><th>VASC-DMC合作状态</th><th>VASC责任BD</th><th>操作</th>
+            </tr></thead>
+            <tbody id="s-rows"></tbody>
+          </table>
+        </div>
+        <div class="note w" style="margin-top:12px">
+          相似客户已存在。若确认不是同一家，可继续创建；若为你自己名下客户，操作栏可直接进入详情页。
+        </div>
+      </div>
+
+      <div id="s-miss" style="display:none">
+        <h4 style="margin:20px 0 9px;font-size:13px">相似列表</h4>
+        <div style="border:1px solid var(--line);border-radius:var(--r)">
+          <div class="empty">
+            <svg width="52" height="40" viewBox="0 0 52 40" aria-hidden="true">
+              <rect x="7" y="13" width="38" height="20" rx="3" fill="var(--surface-3)"/>
+              <rect x="12" y="7" width="28" height="10" rx="2" fill="var(--line-2)"/>
+              <rect x="17" y="21" width="18" height="3" rx="1.5" fill="var(--line-2)"/>
+            </svg>
+            <span>暂无此客户，立即 <button class="btn link" id="btn-empty-create">创建客户</button></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mfoot">
+      <span class="left" id="s-foot">输入名称后点击查询</span>
+      <button class="btn" data-close="m-query">取消</button>
+      <button class="btn pri" id="btn-goto-form" disabled>创建客户</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 2. 创建客户表单 ===== -->
+<div class="mask right" id="m-form" role="dialog" aria-modal="true" aria-labelledby="t-form">
+  <div class="modal drawer">
+    <div class="mhead">
+      <h3 id="t-form">创建客户</h3>
+      <span class="hint" id="f-draft">草稿已缓存到本地</span>
+      <button class="x" id="btn-form-x" aria-label="关闭">✕</button>
+    </div>
+    <div class="mbody">
+      <div class="sechead"><span class="n">1</span><h4>基础信息</h4></div>
+      <div class="grid2">
+        <div>
+          <label class="lbl req" for="f-name">客户名称</label>
+          <input class="inp" id="f-name" placeholder="请输入">
+          <div class="err">请填写客户名称</div>
+        </div>
+        <div>
+          <label class="lbl" for="f-alias">客户别名</label>
+          <input class="inp" id="f-alias" placeholder="请输入">
+        </div>
+        <div>
+          <span class="lbl">客户级别类型</span>
+          <div class="radios">
+            <label><input type="radio" name="lv" value="KA">KA</label>
+            <label><input type="radio" name="lv" value="GT">GT</label>
+            <label><input type="radio" name="lv" value="LT" checked>LT</label>
+          </div>
+        </div>
+        <div>
+          <span class="lbl req">客户类型</span>
+          <div class="radios">
+            <label><input type="radio" name="ct" value="代理" checked>代理</label>
+            <label><input type="radio" name="ct" value="直客">直客</label>
+          </div>
+        </div>
+        <div>
+          <label class="lbl req" for="f-ind">所属行业</label>
+          <select class="sel" id="f-ind"><option value="">请选择</option>
+            <optgroup label="文娱">
+              <option>文娱-轻度游戏</option><option>文娱-中重度游戏</option><option>文娱-社交及影音娱乐</option>
+              <option>文娱-工具</option><option>文娱-阅读</option><option>文娱-金融</option><option>文娱-其他</option>
+            </optgroup>
+            <optgroup label="消费">
+              <option>消费-电商平台</option><option>消费-跨境卖家</option><option>消费-行业品牌</option>
+            </optgroup>
+          </select>
+          <div class="err">请选择所属行业</div>
+        </div>
+        <div>
+          <label class="lbl req" for="f-country">国家/地区</label>
+          <select class="sel" id="f-country"><option>中国</option><option>美国</option><option>日本</option><option>英国</option><option>德国</option></select>
+          <div class="err">请选择国家/地区</div>
+        </div>
+        <div>
+          <label class="lbl req" for="f-city">城市</label>
+          <input class="inp" id="f-city" placeholder="请输入">
+          <div class="err">请填写城市</div>
+        </div>
+        <div>
+          <label class="lbl" for="f-site">客户官网</label>
+          <input class="inp" id="f-site" placeholder="请输入">
+        </div>
+        <div class="full">
+          <span class="lbl req">客户来源</span>
+          <div class="radios">
+            <label><input type="radio" name="src" value="市场线索" checked>市场线索</label>
+            <label><input type="radio" name="src" value="媒体直客">媒体直客</label>
+            <label><input type="radio" name="src" value="上下游合作伙伴">上下游合作伙伴</label>
+            <label><input type="radio" name="src" value="老客转介绍">老客转介绍</label>
+            <label><input type="radio" name="src" value="内容资源">内容资源</label>
+            <label><input type="radio" name="src" value="其他">其他</label>
+            <label><input type="radio" name="src" value="内部产品">内部产品</label>
+          </div>
+        </div>
+      </div>
+      <div class="sechead"><span class="n">2</span><h4>线索</h4>
+        <button class="btn pri sm" id="btn-add-lead" style="margin-left:auto">添加</button>
+      </div>
+      <div style="border:1px solid var(--line);border-radius:var(--r)">
+        <div class="tblwrap">
+          <table>
+            <thead><tr><th>跟进BD</th><th>服务项</th><th>客户需求</th><th>线索来源</th><th>提供人</th><th style="width:44px">操作</th></tr></thead>
+            <tbody id="lead-rows"></tbody>
+          </table>
+        </div>
+        <div class="empty" id="lead-empty">
+          <svg width="52" height="40" viewBox="0 0 52 40" aria-hidden="true">
+            <rect x="7" y="13" width="38" height="20" rx="3" fill="var(--surface-3)"/>
+            <rect x="12" y="7" width="28" height="10" rx="2" fill="var(--line-2)"/>
+            <rect x="17" y="21" width="18" height="3" rx="1.5" fill="var(--line-2)"/>
+          </svg>
+          暂无数据
+        </div>
+      </div>
+      <div style="margin-top:14px">
+        <label class="lbl req" for="f-biz">业务类型</label>
+        <select class="sel" id="f-biz"><option value="">请选择</option><option>MTC</option><option>PAC</option><option>VASC-DMC</option><option>VASC-CMC</option><option>VASC-ECP</option></select>
+        <div class="err">请选择业务类型</div>
+      </div>
+
+      <div class="sechead"><span class="n">3</span><h4>其他信息</h4></div>
+      <div class="grid2">
+        <div>
+          <label class="lbl req" for="f-plan">推广计划</label>
+          <textarea class="ta" id="f-plan" placeholder="输入内容"></textarea>
+          <div class="err">请填写推广计划</div>
+        </div>
+        <div>
+          <label class="lbl req" for="f-rel">人际关系</label>
+          <textarea class="ta" id="f-rel" placeholder="请输入"></textarea>
+          <div class="err">请填写人际关系</div>
+        </div>
+        <div>
+          <label class="lbl req" for="f-partner">合作友商</label>
+          <textarea class="ta" id="f-partner" placeholder="输入内容"></textarea>
+          <div class="err">请填写合作友商</div>
+        </div>
+        <div>
+          <label class="lbl req" for="f-oper">经营相关</label>
+          <textarea class="ta" id="f-oper" placeholder="请输入"></textarea>
+          <div class="err">请填写经营相关</div>
+        </div>
+        <div>
+          <label class="lbl req" for="f-prod">产品相关</label>
+          <textarea class="ta" id="f-prod" placeholder="输入内容"></textarea>
+          <div class="err">请填写产品相关</div>
+        </div>
+      </div>
+    </div>
+    <div class="mfoot">
+      <span class="left">必填 <b id="f-count">0</b>/10 已完成</span>
+      <button class="btn" id="btn-form-cancel">取消</button>
+      <button class="btn pri" id="btn-form-submit">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 3. 添加线索（带全量表格选人） ===== -->
+<div class="mask" id="m-lead-picker" role="dialog" aria-modal="true" aria-labelledby="t-lead-picker" style="z-index:55">
+  <div class="modal wide">
+    <div class="mhead">
+      <h3 id="t-lead-picker">线索</h3>
+      <div class="hint" style="margin-left:12px">从 1 到 40，共 21855</div>
+      <button class="x" data-close="m-lead-picker" aria-label="关闭">✕</button>
+    </div>
+    <div class="mbody" style="padding:12px 16px">
+      <div class="tblwrap" style="border:1px solid var(--line);border-radius:var(--r);max-height:420px;overflow:auto">
+        <table>
+          <thead><tr>
+            <th style="width:50px">编号</th><th>公司名称</th><th>联系人名称</th><th>联系方式</th>
+            <th>线索状态</th><th>跟进BD</th><th>服务项</th><th>客户需求</th>
+            <th>线索来源</th><th>提供人</th><th>进度跟踪人</th><th>客户</th>
+            <th>线索分流时间</th><th>创建时间</th>
+          </tr></thead>
+          <tbody id="lead-picker-rows">
+            <tr><td>9100</td><td>SoCheap</td><td>/</td><td>其他</td><td></td><td></td>
+              <td>营销云SaaS</td><td>后续更新</td><td></td><td>(0)</td><td></td><td></td>
+              <td class="mono">2026-09-14 12:...</td><td class="mono">2026-09-14 12:...</td></tr>
+            <tr><td>9096</td><td>Meshy</td><td>/</td><td>其他</td><td></td><td></td>
+              <td>营销云SaaS</td><td>后续更新</td><td></td><td>(0)</td><td></td><td></td>
+              <td class="mono">2026-09-14 12:...</td><td class="mono">2026-09-14 12:...</td></tr>
+            <tr><td>9095</td><td>OpenArt</td><td>/</td><td>其他</td><td></td><td></td>
+              <td>营销云SaaS</td><td>后续更新</td><td></td><td>(0)</td><td></td><td></td>
+              <td class="mono">2026-09-14 12:...</td><td class="mono">2026-09-14 12:...</td></tr>
+            <tr><td>9094</td><td>Yesand</td><td>Markus</td><td>其他</td><td></td><td></td>
+              <td>营销云SaaS</td><td>公司介绍:</td><td></td><td>(0)</td><td></td><td></td>
+              <td class="mono">2026-09-14 12:...</td><td class="mono">2026-09-14 11:...</td></tr>
+            <tr><td>9093</td><td>GMI</td><td>/</td><td>其他</td><td></td><td></td>
+              <td>营销云SaaS</td><td>会议纪要:</td><td></td><td>(0)</td><td></td><td></td>
+              <td class="mono">2026-09-14 12:...</td><td class="mono">2026-09-14 11:...</td></tr>
+            <tr><td>9092</td><td>Higgsfield</td><td>/</td><td>其他</td><td>特赖达</td><td></td>
+              <td>营销云SaaS</td><td>会议纪要:</td><td></td><td>(0)</td><td></td><td></td>
+              <td class="mono">2026-09-14 12:...</td><td class="mono">2026-09-07 11:...</td></tr>
+            <tr><td>9091</td><td>Pika</td><td>/</td><td>其他</td><td></td><td></td>
+              <td>营销云SaaS</td><td>会议纪要:</td><td></td><td>(0)</td><td></td><td></td>
+              <td class="mono">2026-09-14 12:...</td><td class="mono">2026-09-14 11:...</td></tr>
+            <tr><td>9090</td><td>金季</td><td>/</td><td></td><td>赢单-已消耗</td><td>袁继涛</td>
+              <td>1</td><td>转介绍</td><td></td><td>林妹乐</td><td>(1)</td><td></td>
+              <td class="mono">2026-09-14 11:...</td><td class="mono">2026-09-14 11:...</td></tr>
+            <tr><td>9089</td><td>盈帆</td><td>/</td><td></td><td>赢单-已消耗</td><td>申泰宁</td>
+              <td></td><td>服装</td><td>转介绍</td><td>林妹乐</td><td>(1)</td><td></td>
+              <td class="mono">2026-09-14 11:...</td><td class="mono">2026-09-07 11:...</td></tr>
+            <tr><td>9088</td><td>全民互动</td><td>/</td><td></td><td>确认需求买和报价...</td><td></td>
+              <td></td><td>账期返点 素材服</td><td>转介绍</td><td>任泰超</td><td>(1)</td><td></td>
+              <td class="mono">2026-09-07 11:...</td><td class="mono">2026-09-07 11:...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn" data-close="m-lead-picker">关闭</button>
+      <button class="btn pri" id="btn-select-lead">选择</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 3b. 添加线索（简化表单） ===== -->
+<div class="mask" id="m-lead" role="dialog" aria-modal="true" aria-labelledby="t-lead" style="z-index:50">
+  <div class="modal slim">
+    <div class="mhead"><h3 id="t-lead">添加线索</h3><button class="x" data-close="m-lead" aria-label="关闭">✕</button></div>
+    <div class="mbody" style="display:grid;gap:13px">
+      <div><label class="lbl req" for="l-bd">跟进BD</label>
+        <select class="sel" id="l-bd"><option value="">请选择</option><option>张三</option><option>李四</option><option>王五</option></select></div>
+      <div><label class="lbl req" for="l-svc">服务项</label>
+        <select class="sel" id="l-svc"><option value="">请选择</option><option>媒体投放</option><option>效果广告</option><option>内容营销</option></select></div>
+      <div><label class="lbl" for="l-need">客户需求</label><input class="inp" id="l-need" placeholder="请输入"></div>
+      <div><label class="lbl" for="l-src">线索来源</label>
+        <select class="sel" id="l-src"><option>市场线索</option><option>老客转介绍</option><option>内部产品</option></select></div>
+      <div><label class="lbl" for="l-by">提供人</label><input class="inp" id="l-by" placeholder="请输入" value="UserName"></div>
+      <div class="err" id="l-err">跟进BD 和 服务项 为必填</div>
+    </div>
+    <div class="mfoot"><button class="btn" data-close="m-lead">取消</button><button class="btn pri" id="btn-lead-ok">确定</button></div>
+  </div>
+</div>
+
+<!-- ===== 4. 通用确认 ===== -->
+<div class="mask" id="m-confirm" role="dialog" aria-modal="true" aria-labelledby="t-confirm" style="z-index:60">
+  <div class="modal slim">
+    <div class="mhead"><h3 id="t-confirm">确定创建客户？</h3><button class="x" data-close="m-confirm" aria-label="关闭">✕</button></div>
+    <div class="mbody"><div id="c-body"></div></div>
+    <div class="mfoot">
+      <button class="btn" id="btn-c-no">取消</button>
+      <button class="btn pri" id="btn-c-yes">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 5. 客户详情 ===== -->
+<div class="mask right" id="m-detail" role="dialog" aria-modal="true" aria-labelledby="t-detail" style="z-index:45">
+  <div class="modal drawer">
+    <div class="mhead"><h3 id="t-detail">客户详情</h3><button class="x" data-close="m-detail" aria-label="关闭">✕</button></div>
+    <div class="mbody" id="d-body"></div>
+    <div class="mfoot"><button class="btn" data-close="m-detail">关闭</button></div>
+  </div>
+</div>
+
+<!-- ===== 6. 编辑客户 ===== -->
+<div class="mask right" id="m-edit" role="dialog" aria-modal="true" aria-labelledby="t-edit" style="z-index:45">
+  <div class="drawer">
+    <div class="mhead">
+      <h3 id="t-edit">编辑客户</h3>
+      <button class="x" data-close="m-edit" aria-label="关闭">✕</button>
+    </div>
+    <div class="mbody" style="padding:20px 24px;overflow:auto">
+      <section class="sect">
+        <h4 class="sect-t">基础信息</h4>
+        <div class="sect-b">
+          <div class="grid2">
+            <div><label class="lbl">客户编号</label><input class="inp" id="e-code" disabled></div>
+            <div><label class="lbl">创建人</label><input class="inp" id="e-creator" disabled></div>
+          </div>
+          <div class="grid2" style="margin-top:14px">
+            <div><label class="lbl">创建时间</label><input class="inp" id="e-ctime" disabled></div>
+            <div><label class="lbl">客户级别类型</label><input class="inp" id="e-cls-ro" disabled></div>
+          </div>
+          <div style="margin-top:14px"><label class="lbl">客户状态</label><input class="inp" id="e-status" disabled></div>
+          <div class="grid2" style="margin-top:14px">
+            <div><label class="lbl">MTC客户状态</label><input class="inp" id="e-status-mtc" disabled></div>
+            <div><label class="lbl">PAC客户状态</label><input class="inp" id="e-status-pac" disabled></div>
+          </div>
+          <div class="grid2" style="margin-top:14px">
+            <div><label class="lbl">VASC-DMC客户状态</label><input class="inp" id="e-status-dmc" disabled></div>
+            <div><label class="lbl">VASC-CMC客户状态</label><input class="inp" id="e-status-cmc" disabled></div>
+          </div>
+          <div class="grid2" style="margin-top:14px">
+            <div><label class="lbl">VASC-ECP客户状态</label><input class="inp" id="e-status-ecp" disabled></div>
+            <div></div>
+          </div>
+          <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--line)">
+            <label class="lbl"><i>*</i>客户名称</label><input class="inp" id="e-name" placeholder="请输入">
+          </div>
+          <div class="grid2" style="margin-top:14px">
+            <div><label class="lbl">客户别名</label><input class="inp" id="e-alias" placeholder="请输入"></div>
+            <div><label class="lbl"><i>*</i>客户类型</label>
+              <div class="radios" style="margin-top:6px">
+                <label><input type="radio" name="e-type" value="代理"><span>代理</span></label>
+                <label><input type="radio" name="e-type" value="直客"><span>直客</span></label>
+              </div>
+            </div>
+          </div>
+          <div class="grid2" style="margin-top:14px">
+            <div><label class="lbl"><i>*</i>所属行业</label>
+              <select class="sel" id="e-ind">
+                <option value="">请选择行业</option>
+                <optgroup label="文娱">
+                  <option>文娱-轻度游戏</option><option>文娱-中重度游戏</option><option>文娱-社交及影音娱乐</option>
+                  <option>文娱-工具</option><option>文娱-阅读</option><option>文娱-金融</option><option>文娱-其他</option>
+                </optgroup>
+                <optgroup label="消费">
+                  <option>消费-电商平台</option><option>消费-跨境卖家</option><option>消费-行业品牌</option>
+                </optgroup>
+              </select>
+            </div>
+            <div><label class="lbl"><i>*</i>城市</label><input class="inp" id="e-city" placeholder="请输入"></div>
+          </div>
+          <div class="grid2" style="margin-top:14px">
+            <div><label class="lbl">国家/地区</label><input class="inp" id="e-country" placeholder="请输入" value="中国"></div>
+            <div><label class="lbl">客户官网</label><input class="inp" id="e-web" placeholder="https://"></div>
+          </div>
+          <div style="margin-top:14px"><label class="lbl"><i>*</i>客户来源</label>
+            <div class="radios" style="margin-top:6px">
+              <label><input type="radio" name="e-src" value="市场线索"><span>市场线索</span></label>
+              <label><input type="radio" name="e-src" value="媒体直客"><span>媒体直客</span></label>
+              <label><input type="radio" name="e-src" value="上下游合作伙伴"><span>上下游合作伙伴</span></label>
+              <label><input type="radio" name="e-src" value="老客转介绍"><span>老客转介绍</span></label>
+              <label><input type="radio" name="e-src" value="内部资源"><span>内部资源</span></label>
+              <label><input type="radio" name="e-src" value="其他"><span>其他</span></label>
+              <label><input type="radio" name="e-src" value="内部产品"><span>内部产品</span></label>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="sect">
+        <h4 class="sect-t">线索</h4>
+        <div class="sect-b">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+            <button class="btn sm pri" id="btn-edit-add-lead">添加线索</button>
+          </div>
+          <div style="border:1px solid var(--line);border-radius:var(--r)">
+            <div class="tblwrap">
+              <table>
+                <thead><tr><th>跟进BD</th><th>服务项</th><th>客户需求</th><th>线索来源</th><th>提供人</th><th style="width:44px"></th></tr></thead>
+                <tbody id="edit-lead-rows"></tbody>
+              </table>
+            </div>
+            <div class="empty" id="edit-lead-empty">
+              <svg width="52" height="40" viewBox="0 0 52 40" aria-hidden="true">
+                <rect x="7" y="13" width="38" height="20" rx="3" fill="var(--surface-3)"/>
+                <rect x="12" y="7" width="28" height="10" rx="2" fill="var(--line-2)"/>
+                <rect x="17" y="21" width="18" height="3" rx="1.5" fill="var(--line-2)"/>
+              </svg>
+              暂无数据
+            </div>
+          </div>
+          <div style="margin-top:14px">
+            <label class="lbl">业务类型</label>
+            <select class="sel" id="e-biz">
+              <option value="">请选择</option><option>MTC</option><option>PAC</option><option>VASC-DMC</option><option>VASC-CMC</option><option>VASC-ECP</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="sect">
+        <h4 class="sect-t">其他信息</h4>
+        <div class="sect-b" style="display:grid;grid-template-columns:1fr 1fr;gap:14px 16px">
+          <div><label class="lbl">推广计划</label><textarea class="ta" id="e-plan" placeholder="请输入" rows="4"></textarea></div>
+          <div><label class="lbl">人际关系</label><textarea class="ta" id="e-rel" placeholder="请输入" rows="4"></textarea></div>
+          <div><label class="lbl">合作友商</label><textarea class="ta" id="e-coop-rel" placeholder="请输入" rows="4"></textarea></div>
+          <div><label class="lbl">经营相关</label><textarea class="ta" id="e-misc" placeholder="请输入" rows="4"></textarea></div>
+          <div style="grid-column:1/-1"><label class="lbl">产品相关</label><textarea class="ta" id="e-prod" placeholder="请输入" rows="4"></textarea></div>
+        </div>
+      </section>
+    </div>
+    <div class="mfoot">
+      <button class="btn" data-close="m-edit">取消</button>
+      <button class="btn pri" id="btn-edit-ok">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 7. 线索列表查看 ===== -->
+<div class="mask" id="m-lead-list" role="dialog" aria-modal="true" aria-labelledby="t-lead-list" style="z-index:50">
+  <div class="modal" style="width:90vw;max-width:1280px">
+    <div class="mhead">
+      <h3 id="t-lead-list">线索</h3>
+      <span class="hint" style="margin-left:auto;margin-right:8px">从 1 到 <span id="ll-total">40</span>，共 <span id="ll-count">21855</span></span>
+      <button class="x" data-close="m-lead-list" aria-label="关闭">✕</button>
+    </div>
+    <div class="mbody" style="padding:0">
+      <div class="tblwrap" style="max-height:65vh">
+        <table>
+          <thead>
+            <tr>
+              <th>编号</th><th>公司名称</th><th>联系人名称</th><th>联系方式</th><th>线索状态</th><th>跟进BD</th>
+              <th>服务项</th><th>客户需求</th><th>线索来源</th><th>提供人</th><th>进度追踪人</th><th>客户</th>
+              <th>线索分派时间</th><th>创建时间</th>
+            </tr>
+          </thead>
+          <tbody id="ll-rows"></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn" data-close="m-lead-list">关闭</button>
+      <button class="btn pri">选择</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 8. 跟进用户申请 ===== -->
+<div class="mask" id="m-followup" role="dialog" aria-modal="true" aria-labelledby="t-followup" style="z-index:50">
+  <div class="modal" style="width:90vw;max-width:880px">
+    <div class="mhead">
+      <h3 id="t-followup">跟进用户申请</h3>
+      <button class="x" data-close="m-followup" aria-label="关闭">✕</button>
+    </div>
+    <div class="mbody">
+      <div style="margin-bottom:18px">
+        <label class="lbl req">跟进业务</label>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:8px">
+          <label class="biz-card"><input type="checkbox" name="fu-biz" value="MTC">
+            <div class="biz-card-inner">
+              <div class="biz-card-name">MTC</div>
+              <div class="biz-card-desc">营销云SaaS(即广告自投)</div>
+            </div>
+          </label>
+          <label class="biz-card"><input type="checkbox" name="fu-biz" value="PAC">
+            <div class="biz-card-inner">
+              <div class="biz-card-name">PAC</div>
+              <div class="biz-card-desc">中小媒体效果营销</div>
+            </div>
+          </label>
+          <label class="biz-card"><input type="checkbox" name="fu-biz" value="VASC-DMC">
+            <div class="biz-card-inner">
+              <div class="biz-card-name">VASC-DMC</div>
+              <div class="biz-card-desc">数字营销、大媒体效果营销(即广告代投)</div>
+            </div>
+          </label>
+          <label class="biz-card"><input type="checkbox" name="fu-biz" value="VASC-CMC">
+            <div class="biz-card-inner">
+              <div class="biz-card-name">VASC-CMC</div>
+              <div class="biz-card-desc">达人营销、创意服务(如短视频)、达人分销、品牌营销(如娱代运营)</div>
+            </div>
+          </label>
+          <label class="biz-card"><input type="checkbox" name="fu-biz" value="VASC-ECP">
+            <div class="biz-card-inner">
+              <div class="biz-card-name">VASC-ECP</div>
+              <div class="biz-card-desc">直播服务、电商代运营</div>
+            </div>
+          </label>
+        </div>
+      </div>
+      <div style="margin-bottom:18px">
+        <label class="lbl req" for="fu-reason">你现在跟进到哪一步，请详细说明（包含但不限于：对接的人是谁、对接人岗位、部门、上级等）</label>
+        <textarea class="ta" id="fu-reason" rows="5" placeholder="请输入跟进情况,若没有写清楚对接情况,大概率会被驳回"></textarea>
+        <div class="err">请填写跟进详情</div>
+      </div>
+      <div>
+        <label class="lbl req" for="fu-plan">你下一步打算怎么做</label>
+        <textarea class="ta" id="fu-plan" rows="5" placeholder="请输入下一步计划"></textarea>
+        <div class="err">请填写下一步计划</div>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="btn" data-close="m-followup">返回</button>
+      <button class="btn pri" id="btn-submit-followup">提交</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts" aria-live="polite"></div>
+<script>
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ---------- 种子数据 ---------- */
+const SEED = [
+  ['KH-202608001', '北京星燧网络科技有限公司', '星燧网络', '文娱-中重度游戏', '直客', '中国', '北京', '合作中', 'a', '张三', '李明', '张三', '2026-08-04', false],
+  ['KH-202608002', '上海砚台文化传播有限公司', '砚台文化', '文娱-社交及影音娱乐', '代理', '美国', '上海', '未合作', 'c', '王芳', '李四', '李四', '2026-08-04', true],
+  ['KH-202608003', '广州轻叶互动娱乐有限公司', '轻叶互动', '文娱-轻度游戏', '直客', '日本', '东京', '沉寂大于一年', 'b', '赵亮', '王五', '王五', '2026-08-03', false],
+  ['KH-202608004', '深圳墨读数字出版有限公司', '墨读数字', '文娱-阅读', '直客', '英国', '伦敦', '合作中', 'a', '刘强', '赵六', '赵六', '2026-08-03', true],
+  ['KH-202608005', '杭州潮汐电子商务有限公司', '潮汐电商', '消费-电商平台', '直客', '德国', '柏林', '沉寂半年内', 'b', '陈晨', '钱七', '钱七', '2026-08-02', false],
+  ['KH-202607006', '成都拾光工具软件有限公司', '拾光工具', '文娱-工具', '代理', '法国', '巴黎', '未合作', 'c', '周杰', '孙八', '孙八', '2026-07-28', false],
+  ['KH-202607007', '武汉盈算金融信息服务有限公司', '盈算金融', '文娱-金融', '直客', '意大利', '罗马', '合作中', 'a', '吴涛', '周九', '周九', '2026-07-26', true],
+  ['KH-202607008', '南京跨洋供应链管理有限公司', '跨洋供应链', '消费-跨境卖家', '直客', '加拿大', '多伦多', '沉寂大于一年', 'b', '郑伟', '吴十', '吴十', '2026-07-24', false],
+  ['KH-202607009', '重庆麦野品牌管理有限公司', '麦野品牌', '消费-行业品牌', '代理', '澳大利亚', '悉尼', '沉寂半年内', 'b', '冯静', '郑十一', '郑十一', '2026-07-22', false],
+  ['KH-202607010', '西安鹿鸣文化创意有限公司', '鹿鸣文创', '文娱-其他', '代理', '巴西', '里约热内卢', '未合作', 'c', '韩冰', '刘十二', '刘十二', '2026-07-20', true],
+].map(r => ({ no: r[0], name: r[1], alias: r[2], ind: r[3], type: r[4], country: r[5], city: r[6], coop: r[7], cls: r[8], bd: r[9], cm: r[10], by: r[11], at: r[12], archived: r[13] }));
+
+const SIMILAR = [
+  { name: '药丸（北京）健康科技有限公司', mtc: '合作中', mtcBd: '张三', pac: '未合作', pacBd: '—', vasc: '沉寂半年内', vascBd: '李四', mine: true },
+  { name: '上海药丸生物医药有限公司', mtc: '沉寂大于一年', mtcBd: '王五', pac: '合作中', pacBd: '赵六', vasc: '未合作', vascBd: '—', mine: false },
+  { name: '药丸科技（深圳）有限公司', mtc: '未合作', mtcBd: '—', pac: '未合作', pacBd: '—', vasc: '未合作', vascBd: '—', mine: false },
+];
+
+const REQUIRED = [
+  ['f-name', '客户名称'], ['ct', '客户类型'], ['f-ind', '所属行业'], ['f-country', '国家/地区'],
+  ['f-city', '城市'], ['src', '客户来源'], ['f-biz', '业务类型'], ['f-plan', '推广计划'],
+  ['f-rel', '人际关系'], ['f-partner', '合作友商'], ['f-oper', '经营相关'], ['f-prod', '产品相关'],
+];
+const REQ_FIELDS = ['f-name', 'f-ind', 'f-country', 'f-city', 'f-biz', 'f-plan', 'f-rel', 'f-partner', 'f-oper', 'f-prod'];
+
+const DRAFT_KEY = 'bpms.customer.draft';
+const state = {
+  rows: SEED.slice(),
+  leads: [],
+  editLeads: [],
+  editLeadMode: 'create',
+  seq: 10,
+  sim: { similar: 'hit', api: 'ok', sync: 'ok' },
+  step: 'entry',
+  confirm: null,
+};
+
+/* ---------- 流程节点（内部状态，无侧栏 UI） ---------- */
+const ORDER = ['entry', 'query', 'result', 'branch', 'form', 'cache', 'validate', 'confirm', 'api', 'record', 'sync', 'done'];
+function step(k) { state.step = k; }
+function stepBranch(k) { state.branch = k; }
+
+/* ---------- Toast ---------- */
+function toast(kind, text, mono) {
+  const glyph = { ok: '✓', err: '!', warn: '!', info: 'i' }[kind];
+  const el = document.createElement('div');
+  el.className = 'toast ' + kind;
+  el.innerHTML = `<span class="i">${glyph}</span><span>${esc(text)}${mono ? ` <span class="mono">${esc(mono)}</span>` : ''}</span>`;
+  $('#toasts').append(el);
+  setTimeout(() => { el.style.transition = 'opacity .3s'; el.style.opacity = '0'; setTimeout(() => el.remove(), 320); }, 3200);
+}
+
+/* ---------- 弹窗 ---------- */
+function open(id) { $('#' + id).classList.add('on'); }
+function close(id) { $('#' + id).classList.remove('on'); }
+$$('[data-close]').forEach(b => b.addEventListener('click', () => close(b.dataset.close)));
+$$('.mask').forEach(m => m.addEventListener('mousedown', e => { if (e.target === m && m.id !== 'm-form') close(m.id); }));
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  const top = $$('.mask.on').pop();
+  if (top && top.id !== 'm-form') close(top.id);
+});
+
+function ask(title, bodyHtml, okText, onOk) {
+  $('#t-confirm').textContent = title;
+  $('#c-body').innerHTML = bodyHtml;
+  $('#btn-c-yes').textContent = okText;
+  state.confirm = onOk;
+  open('m-confirm');
+}
+$('#btn-c-no').addEventListener('click', () => { close('m-confirm'); state.confirm = null; });
+$('#btn-c-yes').addEventListener('click', () => { const fn = state.confirm; close('m-confirm'); state.confirm = null; fn && fn(); });
+/* ---------- 列表渲染 ---------- */
+function renderRows(freshNo) {
+  $('#rows').innerHTML = state.rows.map(r => `
+    <tr${r.no === freshNo ? ' class="fresh"' : ''}>
+      <td><input class="chk" type="checkbox" aria-label="选择 ${esc(r.name)}"></td>
+      <td class="mono">${esc(r.no)}</td>
+      <td>${esc(r.name)}</td>
+      <td>${esc(r.alias || '—')}</td>
+      <td>${esc(r.ind)}</td>
+      <td><span class="pill ${r.type === '直客' ? 'direct' : 'agent'}">${esc(r.type)}</span></td>
+      <td>${esc(r.country)}</td>
+      <td>${esc(r.city)}</td>
+      <td><span class="dot ${r.cls}">${esc(r.coop)}</span></td>
+      <td>${esc(r.bd || '—')}</td>
+      <td>${esc(r.cm || '—')}</td>
+      <td>${esc(r.by)}</td>
+      <td class="mono">${esc(r.at)}</td>
+      <td><button class="btn link" data-edit="${esc(r.no)}">编辑</button> <button class="btn link" data-detail="${esc(r.no)}">详情</button></td>
+    </tr>`).join('');
+  $('#total').textContent = 40 + state.rows.length;
+}
+$('#rows').addEventListener('click', e => {
+  const edit = e.target.closest('[data-edit]');
+  if (edit) {
+    const row = state.rows.find(r => r.no === edit.dataset.edit);
+    if (row) openEdit(row);
+    return;
+  }
+  const detail = e.target.closest('[data-detail]');
+  if (detail) {
+    const row = state.rows.find(r => r.no === detail.dataset.detail);
+    if (row) showDetail(row);
+  }
+});
+
+function showDetail(r) {
+  if (!r) return;
+  const clsLabel = r.cls === 'a' ? 'KA' : r.cls === 'b' ? 'GT' : 'LT';
+  $('#t-detail').textContent = r.name;
+  $('#d-body').innerHTML = `
+    <div class="note i">该客户已在 CRM 建档，编号 <b>${esc(r.no)}</b>，责任 BD 默认为创建人 ${esc(r.by)}。</div>
+    <dl class="kv">
+      <dt>客户编号</dt><dd class="mono">${esc(r.no)}</dd>
+      <dt>创建人</dt><dd>${esc(r.by)}</dd>
+      <dt>创建时间</dt><dd class="mono">${esc(r.at)}${r.time ? ' ' + esc(r.time) : ''}</dd>
+      <dt>客户级别类型</dt><dd>${esc(clsLabel)}</dd>
+      <dt>客户状态</dt><dd><span class="dot ${r.cls}">${esc(r.coop)}</span></dd>
+      <dt>MTC客户状态</dt><dd>合作中</dd>
+      <dt>PAC客户状态</dt><dd>未合作</dd>
+      <dt>VASC-DMC客户状态</dt><dd>合作中</dd>
+      <dt>VASC-CMC客户状态</dt><dd>沉寂半年内</dd>
+      <dt>VASC-ECP客户状态</dt><dd>未合作</dd>
+      <dt>客户别名</dt><dd>${esc(r.alias || '—')}</dd>
+      <dt>客户类型</dt><dd><span class="pill ${r.type === '直客' ? 'direct' : 'agent'}">${esc(r.type)}</span></dd>
+      <dt>所属行业</dt><dd>${esc(r.ind)}</dd>
+      <dt>国家/城市</dt><dd>${esc(r.country)} · ${esc(r.city)}</dd>
+      <dt>BPMS 同步</dt><dd>${r.synced === false ? '<span class="dot b">失败，后台异步重试中</span>' : '<span class="dot a">已同步</span>'}</dd>
+    </dl>`;
+  open('m-detail');
+}
+
+/* ---------- 状态查询 ---------- */
+function resetQuery() {
+  $('#s-idle').style.display = '';
+  $('#s-hit').style.display = 'none';
+  $('#s-miss').style.display = 'none';
+  $('#s-err').classList.remove('on');
+  $('#s-name').classList.remove('bad');
+  $('#btn-goto-form').disabled = true;
+  $('#s-foot').textContent = '输入名称后点击查询';
+}
+function openQuery() {
+  resetQuery();
+  $('#s-name').value = '';
+  open('m-query');
+  step('query');
+  setTimeout(() => $('#s-name').focus(), 60);
+}
+$('#btn-create').addEventListener('click', () => { step('entry'); openQuery(); });
+$('#btn-query-status').addEventListener('click', () => { step('entry'); openQuery(); });
+
+$('#btn-do-search').addEventListener('click', () => {
+  const v = $('#s-name').value.trim();
+  if (!v) {
+    $('#s-name').classList.add('bad');
+    $('#s-err').classList.add('on');
+    return;
+  }
+  $('#s-name').classList.remove('bad');
+  $('#s-err').classList.remove('on');
+  $('#s-idle').style.display = 'none';
+  step('result');
+
+  const hit = state.sim.similar === 'hit' ? SIMILAR.filter(s => s.name.includes(v) || v.includes('药丸') || v.length < 3) : [];
+  if (hit.length) {
+    $('#s-rows').innerHTML = hit.map((s, i) => `
+      <tr>
+        <td>${esc(s.name)}</td>
+        <td><span class="dot ${s.mtc === '合作中' ? 'a' : s.mtc === '未合作' ? 'c' : 'b'}">${esc(s.mtc)}</span></td>
+        <td>${esc(s.mtcBd)}</td>
+        <td><span class="dot ${s.pac === '合作中' ? 'a' : s.pac === '未合作' ? 'c' : 'b'}">${esc(s.pac)}</span></td>
+        <td>${esc(s.pacBd)}</td>
+        <td><span class="dot ${s.vasc === '合作中' ? 'a' : s.vasc === '未合作' ? 'c' : 'b'}">${esc(s.vasc)}</span></td>
+        <td>${esc(s.vascBd)}</td>
+        <td class="ops">${s.mine
+          ? `<button class="btn link" data-follow="${i}">跟进</button><button class="btn link" data-sim-detail="${i}">查看详情</button>`
+          : `<button class="btn link" data-follow="${i}">点击跟进</button>`}</td>
+      </tr>`).join('');
+    $('#s-hit').style.display = '';
+    $('#s-miss').style.display = 'none';
+    $('#s-foot').textContent = `命中 ${hit.length} 家相似客户，确认不是同一家可继续创建`;
+  } else {
+    $('#s-hit').style.display = 'none';
+    $('#s-miss').style.display = '';
+    $('#s-foot').textContent = '系统内无此客户，可直接创建';
+  }
+  $('#btn-goto-form').disabled = false;
+});
+$('#s-name').addEventListener('keydown', e => { if (e.key === 'Enter') $('#btn-do-search').click(); });
+
+$('#s-hit').addEventListener('click', e => {
+  const d = e.target.closest('[data-sim-detail]');
+  const f = e.target.closest('[data-follow]');
+  if (d) {
+    stepBranch('branch');
+    const s = SIMILAR[+d.dataset.simDetail];
+    showDetail({ no: 'KH-202605018', name: s.name, alias: '药丸健康', ind: '文娱-其他', type: '直客', country: '中国', city: '北京', coop: s.mtc, cls: 'a', by: 'UserName', at: '2026-05-11' });
+  }
+  if (f) {
+    stepBranch('branch');
+    const s = SIMILAR[+f.dataset.follow];
+    if (s.mine) {
+      toast('ok', '已新建跟进记录，可在客户资料卡查看');
+    } else {
+      openFollowup(s.name);
+    }
+  }
+});
+$$('#m-query [data-close]').forEach(b => b.addEventListener('click', () => step('entry')));
+$$('#m-lead-picker [data-close]').forEach(b => b.addEventListener('click', () => close('m-lead-picker')));
+$('#btn-empty-create').addEventListener('click', () => openForm());
+$('#btn-goto-form').addEventListener('click', () => {
+  if ($('#s-hit').style.display !== 'none') {
+    ask('系统有相似客户，确认需要创建？', '<div class="note w">系统内已存在相似客户。重复建档会导致返点与合作状态口径分裂，请确认这是一家新客户。</div>', '继续创建', () => openForm());
+  } else openForm();
+});
+/* ---------- 创建表单 ---------- */
+function val(id) { return ($('#' + id) || {}).value || ''; }
+function radio(name) { const r = $(`input[name="${name}"]:checked`); return r ? r.value : ''; }
+
+function countDone() {
+  const n = REQ_FIELDS.filter(id => val(id).trim()).length;
+  $('#f-count').textContent = n;
+  return n;
+}
+function collect() {
+  return {
+    name: val('f-name').trim(), alias: val('f-alias').trim(), lv: radio('lv'), type: radio('ct'),
+    ind: val('f-ind'), country: val('f-country'), city: val('f-city').trim(), site: val('f-site').trim(),
+    src: radio('src'), biz: val('f-biz'), plan: val('f-plan').trim(), rel: val('f-rel').trim(),
+    partner: val('f-partner').trim(), oper: val('f-oper').trim(), prod: val('f-prod').trim(),
+    leads: state.leads.slice(),
+  };
+}
+function saveDraft() {
+  try { localStorage.setItem(DRAFT_KEY, JSON.stringify(collect())); } catch (e) { }
+  const t = $('#f-draft');
+  t.textContent = '草稿已缓存到本地 · ' + new Date().toLocaleTimeString('zh-CN', { hour12: false });
+  t.style.color = 'var(--ok)';
+  setTimeout(() => { t.style.color = ''; }, 900);
+  if (state.step === 'form') stepBranch('cache');
+}
+function loadDraft() {
+  let d;
+  try { d = JSON.parse(localStorage.getItem(DRAFT_KEY) || 'null'); } catch (e) { }
+  if (!d) return false;
+  const set = (id, v) => { const el = $('#' + id); if (el) el.value = v || ''; };
+  set('f-name', d.name); set('f-alias', d.alias); set('f-ind', d.ind); set('f-country', d.country || '中国');
+  set('f-city', d.city); set('f-site', d.site); set('f-biz', d.biz); set('f-plan', d.plan);
+  set('f-rel', d.rel); set('f-partner', d.partner); set('f-oper', d.oper); set('f-prod', d.prod);
+  [['lv', d.lv], ['ct', d.type], ['src', d.src]].forEach(([n, v]) => {
+    const r = $(`input[name="${n}"][value="${v}"]`); if (r) r.checked = true;
+  });
+  state.leads = d.leads || [];
+  renderLeads();
+  return true;
+}
+function clearForm() {
+  ['f-name', 'f-alias', 'f-ind', 'f-city', 'f-site', 'f-biz', 'f-plan', 'f-rel', 'f-partner', 'f-oper', 'f-prod']
+    .forEach(id => { $('#' + id).value = ''; });
+  $('#f-country').value = '中国';
+  $('input[name="lv"][value="LT"]').checked = true;
+  $('input[name="ct"][value="代理"]').checked = true;
+  $('input[name="src"][value="市场线索"]').checked = true;
+  state.leads = [];
+  renderLeads();
+  clearErrors();
+  countDone();
+}
+function clearErrors() { $$('.bad', $('#m-form')).forEach(el => el.classList.remove('bad')); }
+
+function openForm() {
+  close('m-query');
+  close('m-confirm');
+  clearErrors();
+  const restored = loadDraft();
+  $('#f-draft').textContent = restored ? '已恢复本地缓存的草稿' : '字段失焦后自动缓存到本地';
+  if (!restored && $('#s-name').value.trim()) $('#f-name').value = $('#s-name').value.trim();
+  countDone();
+  open('m-form');
+  step('form');
+  setTimeout(() => $('#f-name').focus(), 80);
+}
+
+$$('#m-form .inp, #m-form .sel, #m-form .ta').forEach(el => {
+  el.addEventListener('blur', saveDraft);
+  el.addEventListener('input', () => { el.classList.remove('bad'); countDone(); });
+  el.addEventListener('change', () => { el.classList.remove('bad'); countDone(); });
+});
+$$('#m-form input[type="radio"]').forEach(r => r.addEventListener('change', saveDraft));
+
+/* ---------- 线索子弹窗 ---------- */
+function renderLeads() {
+  const has = state.leads.length > 0;
+  $('#lead-empty').style.display = has ? 'none' : '';
+  $('#lead-rows').innerHTML = state.leads.map((l, i) => `
+    <tr><td>${esc(l.bd)}</td><td>${esc(l.svc)}</td><td>${esc(l.need || '—')}</td>
+    <td>${esc(l.src)}</td><td>${esc(l.by || '—')}</td>
+    <td><button class="btn link" data-del="${i}">删除</button></td></tr>`).join('');
+}
+$('#lead-rows').addEventListener('click', e => {
+  const b = e.target.closest('[data-del]');
+  if (!b) return;
+  state.leads.splice(+b.dataset.del, 1);
+  renderLeads();
+  saveDraft();
+});
+$('#btn-add-lead').addEventListener('click', () => {
+  state.editLeadMode = 'create';
+  $('#l-bd').value = ''; $('#l-svc').value = ''; $('#l-need').value = '';
+  $('#l-src').value = '市场线索';
+  $('#l-by').value = 'UserName';
+  $('#l-err').classList.remove('on');
+  open('m-lead-picker');
+});
+
+$('#btn-select-lead').addEventListener('click', () => {
+  close('m-lead-picker');
+  open('m-lead');
+});
+
+$('#btn-lead-ok').addEventListener('click', () => {
+  const bd = val('l-bd'), svc = val('l-svc');
+  if (!bd || !svc) { $('#l-err').classList.add('on'); return; }
+  const lead = { bd, svc, need: val('l-need').trim(), src: val('l-src'), by: val('l-by').trim() };
+
+  if (state.editLeadMode === 'edit') {
+    state.editLeads.push(lead);
+    renderEditLeads();
+  } else {
+    state.leads.push(lead);
+    renderLeads();
+    saveDraft();
+  }
+
+  close('m-lead');
+  toast('ok', '线索已添加');
+});
+
+/* ---------- 编辑客户 ---------- */
+function openEdit(row) {
+  close('m-detail');
+
+  // 填充只读字段
+  $('#e-code').value = row.no || '';
+  $('#e-creator').value = row.by || '';
+  $('#e-ctime').value = (row.at + (row.time ? ' ' + row.time : '')) || '';
+
+  // 客户级别类型 (根据 cls 映射)
+  const clsLabel = row.cls === 'a' ? 'KA' : row.cls === 'b' ? 'GT' : 'LT';
+  $('#e-cls-ro').value = clsLabel;
+
+  // 客户状态
+  $('#e-status').value = row.coop || '';
+  $('#e-status-mtc').value = '合作中';
+  $('#e-status-pac').value = '未合作';
+  $('#e-status-dmc').value = '合作中';
+  $('#e-status-cmc').value = '沉寂半年内';
+  $('#e-status-ecp').value = '未合作';
+
+  // 填充可编辑基础信息
+  $('#m-edit').querySelector('#t-edit').textContent = '编辑客户';
+  $('#e-name').value = row.name || '';
+  $('#e-alias').value = row.alias || '';
+  $('#e-ind').value = row.ind || '';
+  $('#e-city').value = row.city || '';
+  $('#e-country').value = row.country || '中国';
+  $('#e-web').value = '';
+
+  // 客户类型
+  const typeRadio = $(`input[name="e-type"][value="${row.type}"]`);
+  if (typeRadio) typeRadio.checked = true;
+
+  // 客户来源 (默认市场线索)
+  const srcRadio = $(`input[name="e-src"][value="市场线索"]`);
+  if (srcRadio) srcRadio.checked = true;
+
+  // 其他信息
+  $('#e-plan').value = '本季度推广计划初期以增加产品知名度，加强与核心渠道合作...';
+  $('#e-rel').value = '人际关系网络是内部团队外部合作伙伴，决策链明确...';
+  $('#e-coop-rel').value = '已与多家合作友商建立战略伙伴关系，互相引荐资源...';
+  $('#e-misc').value = '经营相关文档里未来6个月的经营数据，季度目标与实际达成...';
+  $('#e-prod').value = '产品组成方面，核心产品智能销售管理系统覆盖全链路...';
+
+  // 线索数据
+  state.editLeads = [
+    { bd: '张三', svc: '媒体投放', need: '游戏买量', src: '市场线索', by: 'UserName' },
+    { bd: '李四', svc: '效果广告', need: '品牌曝光', src: '老客转介绍', by: 'UserName' }
+  ];
+  state.editLeadMode = 'edit';
+  renderEditLeads();
+
+  open('m-edit');
+}
+
+$('#btn-edit-add-lead').addEventListener('click', () => {
+  state.editLeadMode = 'edit';
+  $('#l-bd').value = '';
+  $('#l-svc').value = '';
+  $('#l-need').value = '';
+  $('#l-src').value = '市场线索';
+  $('#l-by').value = 'UserName';
+  $('#l-err').classList.remove('on');
+  open('m-lead');
+});
+
+function renderEditLeads() {
+  const r = $('#edit-lead-rows');
+  const e = $('#edit-lead-empty');
+  if (!state.editLeads.length) {
+    r.innerHTML = '';
+    e.style.display = 'flex';
+    return;
+  }
+  e.style.display = 'none';
+  r.innerHTML = state.editLeads.map((l, i) => `
+    <tr><td>${l.bd}</td><td>${l.svc}</td><td>${l.need}</td><td>${l.src}</td><td>${l.by}</td>
+      <td><button class="del" data-del-edit="${i}" title="删除">✕</button></td></tr>
+  `).join('');
+}
+
+$('#edit-lead-rows').addEventListener('click', e => {
+  const b = e.target.closest('[data-del-edit]');
+  if (b) {
+    state.editLeads.splice(+b.dataset.delEdit, 1);
+    renderEditLeads();
+    toast('info', '已删除线索');
+  }
+});
+
+$('#btn-edit-ok').addEventListener('click', () => {
+  close('m-edit');
+  toast('ok', '客户信息已更新');
+});
+
+/* ---------- 取消 / 放弃编辑 ---------- */
+function tryCancel() {
+  const d = collect();
+  const dirty = REQ_FIELDS.some(id => val(id).trim()) || d.alias || d.site || state.leads.length;
+  if (!dirty) { close('m-form'); step('entry'); return; }
+  ask('确定放弃编辑？', '<div class="note w">表单内容已缓存到本地，放弃后返回列表页；下次打开创建弹窗会自动恢复这份草稿。</div>', '确定放弃', () => {
+    close('m-form');
+    step('entry');
+    toast('info', '已返回客户列表页，草稿保留在本地');
+  });
+}
+$('#btn-form-cancel').addEventListener('click', tryCancel);
+$('#btn-form-x').addEventListener('click', tryCancel);
+
+/* ---------- 提交：校验 → 确认 → 接口 ---------- */
+$('#btn-form-submit').addEventListener('click', () => {
+  step('validate');
+  clearErrors();
+  const missing = [];
+  REQ_FIELDS.forEach(id => {
+    if (!val(id).trim()) { $('#' + id).classList.add('bad'); missing.push(id); }
+  });
+  if (missing.length) {
+    $('#' + missing[0]).scrollIntoView({ block: 'center', behavior: 'smooth' });
+    $('#' + missing[0]).focus({ preventScroll: true });
+    const names = missing.map(id => (REQUIRED.find(r => r[0] === id) || [, id])[1]);
+    toast('err', `还有 ${missing.length} 个必填字段未填写：${names.slice(0, 3).join('、')}${names.length > 3 ? ' 等' : ''}`);
+    step('form');
+    return;
+  }
+  const d = collect();
+  step('confirm');
+  ask('确定创建客户？', `
+    <div class="note i">提交后系统将生成客户编号，并把责任 BD 默认设为创建人 <b>UserName</b>。</div>
+    <dl class="kv">
+      <dt>客户名称</dt><dd>${esc(d.name)}</dd>
+      <dt>客户类型</dt><dd>${esc(d.lv)} · ${esc(d.type)}</dd>
+      <dt>所属行业</dt><dd>${esc(d.ind)}</dd>
+      <dt>国家/城市</dt><dd>${esc(d.country)} · ${esc(d.city)}</dd>
+      <dt>客户来源</dt><dd>${esc(d.src)}</dd>
+      <dt>业务类型</dt><dd>${esc(d.biz)}</dd>
+      <dt>线索</dt><dd>${d.leads.length ? d.leads.length + ' 条' : '未添加'}</dd>
+    </dl>`, '确定创建', () => submit(d));
+});
+
+function nextNo() {
+  const now = new Date();
+  const ym = now.getFullYear() + String(now.getMonth() + 1).padStart(2, '0');
+  state.seq += 1;
+  return 'KH-' + ym + String(state.seq).padStart(3, '0');
+}
+
+function submit(d) {
+  step('api');
+  const btn = $('#btn-form-submit');
+  btn.disabled = true;
+  btn.textContent = '提交中…';
+
+  setTimeout(() => {
+    btn.disabled = false;
+    btn.textContent = '确定';
+
+    if (state.sim.api === 'dup') {
+      toast('err', '客户已存在，请返回查询客户合作状态后确认');
+      step('form');
+      return;
+    }
+    if (state.sim.api === 'err') {
+      toast('err', '系统异常，请稍后重试');
+      step('form');
+      return;
+    }
+
+    /* 成功：编号 → 创建人 → 日志 → 同步 BPMS */
+    const no = nextNo();
+    const now = new Date();
+    const at = now.toISOString().slice(0, 10);
+    const time = now.toLocaleTimeString('zh-CN', { hour12: false });
+    step('record');
+
+    const synced = state.sim.sync === 'ok';
+    const row = {
+      no, name: d.name, alias: d.alias, ind: d.ind, type: d.type, country: d.country, city: d.city,
+      coop: '未合作', cls: 'c', bd: 'UserName', cm: 'UserName', by: 'UserName', at, time, synced,
+    };
+    state.rows.unshift(row);
+
+    setTimeout(() => {
+      step('sync');
+      if (!synced) toast('warn', '数据同步 BPMS 失败，已转后台异步重试（用户无感知）');
+
+      setTimeout(() => {
+        step('done');
+        toast('ok', '创建成功，客户编号', no);
+        close('m-form');
+        localStorage.removeItem(DRAFT_KEY);
+        clearForm();
+        renderRows(no);
+        $('.main').scrollTo({ top: 0, behavior: 'smooth' });
+      }, 420);
+    }, 380);
+  }, 520);
+}
+
+/* ---------- 模拟开关 ---------- */
+$$('[data-sim]').forEach(b => b.addEventListener('click', () => {
+  const k = b.dataset.sim;
+  state.sim[k] = b.dataset.v;
+  $$(`[data-sim="${k}"]`).forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+}));
+
+$('#btn-restart').addEventListener('click', () => {
+  state.rows = SEED.slice();
+  state.seq = 10;
+  localStorage.removeItem(DRAFT_KEY);
+  clearForm();
+  $$('.mask.on').forEach(m => m.classList.remove('on'));
+  renderRows();
+  step('entry');
+  toast('info', '原型已重置到初始状态');
+});
+
+$('#btn-edit-add-lead').addEventListener('click', () => {
+  state.editLeadMode = 'edit';
+  $('#l-bd').value = ''; $('#l-svc').value = ''; $('#l-need').value = '';
+  $('#l-src').value = '市场线索';
+  $('#l-by').value = 'UserName';
+  $('#l-err').classList.remove('on');
+  open('m-lead');
+});
+
+/* ---------- 编辑弹窗 tab 切换 ---------- */
+$$('.etab').forEach(tab => tab.addEventListener('click', () => {
+  const target = tab.dataset.etab;
+  $$('.etab').forEach(t => t.classList.remove('on'));
+  $$('.epane').forEach(p => p.classList.remove('on'));
+  tab.classList.add('on');
+  $(`.epane[data-epane="${target}"]`).classList.add('on');
+}));
+
+$('#btn-edit-ok').addEventListener('click', () => {
+  toast('ok', '客户信息已保存');
+  close('m-edit');
+});
+
+/* ---------- 线索列表查看 ---------- */
+const LEAD_LIST_SAMPLE = [
+  ['9100', 'SoCheap', '/', '其他', '', '', '营销云SaaS', '后续更新', '', '(0)', '', '', '2026-09-14 12:...', '2026-09-14 12:...'],
+  ['9096', 'Meshy', '/', '其他', '', '', '营销云SaaS', '后续更新', '', '(0)', '', '', '2026-09-14 12:...', '2026-09-14 12:...'],
+  ['9095', 'OpenArt', '/', '其他', '', '', '营销云SaaS', '后续更新', '', '(0)', '', '', '2026-09-14 12:...', '2026-09-14 12:...'],
+  ['9094', 'Yesand', 'Markus', '其他', '', '', '营销云SaaS', '公司介绍:', '', '(0)', '', '', '2026-09-14 12:...', '2026-09-14 11:...'],
+  ['9093', 'GMI', '/', '其他', '', '', '营销云SaaS', '会议纪要:', '', '(0)', '', '', '2026-09-14 12:...', '2026-09-14 11:...'],
+  ['9092', 'Higgsfield', '/', '其他', '特触达', '', '营销云SaaS', '会议纪要:', '', '(0)', '', '', '2026-09-14 12:...', '2026-09-14 11:...'],
+  ['9091', 'Pika', '/', '其他', '', '', '营销云SaaS', '会议纪要:', '', '(0)', '', '', '2026-09-14 12:...', '2026-09-14 11:...'],
+  ['9090', '金泰', '', '', '高草-巴消耗', '袁德涛', '', '1', '转介绍', '林咏乐', '(1)', '', '2026-09-14 11:...', '2026-09-14 11:...'],
+  ['9089', '盈帆', '', '', '高草-巴消耗', '甲泰宁', '', '顺装', '转介绍', '林咏乐', '(1)', '', '2026-09-14 11:...', '2026-09-14 11:...'],
+  ['9088', '全民互动', '', '', '德认需求和想价...', '', '', '账期选点 素材费', '转介绍', '任宪超', '(1)', '', '2026-09-07 11:...', '2026-09-07 11:...'],
+];
+
+function openLeadList() {
+  const tbody = $('#ll-rows');
+  tbody.innerHTML = LEAD_LIST_SAMPLE.map(r => `<tr>
+    ${r.map(c => `<td>${esc(c)}</td>`).join('')}
+  </tr>`).join('');
+  $('#ll-total').textContent = '40';
+  $('#ll-count').textContent = '21855';
+  open('m-lead-list');
+}
+
+/* ---------- 跟进用户申请 ---------- */
+function openFollowup(customerName) {
+  $('#t-followup').textContent = customerName ? `跟进用户申请 - ${customerName}` : '跟进用户申请';
+  $('#fu-reason').value = '';
+  $('#fu-plan').value = '';
+  $$('[name="fu-biz"]').forEach(c => { c.checked = false; });
+  $('#fu-reason').classList.remove('bad');
+  $('#fu-plan').classList.remove('bad');
+  open('m-followup');
+}
+
+$$('#m-followup [data-close]').forEach(b => b.addEventListener('click', () => close('m-followup')));
+
+$('#btn-submit-followup').addEventListener('click', () => {
+  const bizChecked = $$('[name="fu-biz"]:checked');
+  const reason = $('#fu-reason').value.trim();
+  const plan = $('#fu-plan').value.trim();
+
+  let bad = false;
+  if (!bizChecked.length) {
+    toast('warn', '请至少选择一项跟进业务');
+    bad = true;
+  }
+  if (!reason) {
+    $('#fu-reason').classList.add('bad');
+    bad = true;
+  } else {
+    $('#fu-reason').classList.remove('bad');
+  }
+  if (!plan) {
+    $('#fu-plan').classList.add('bad');
+    bad = true;
+  } else {
+    $('#fu-plan').classList.remove('bad');
+  }
+
+  if (bad) return;
+
+  close('m-followup');
+  toast('info', '已提交客户跟进申请工单，等待现责任 BD 确认');
+});
+
+/* ---------- 列表页查询 ---------- */
+$('#btn-search').addEventListener('click', () => {
+  const n = $('#q-name').value.trim();
+  const archived = $('#q-archived').value;
+  let filtered = SEED.slice();
+
+  // 名称筛选
+  if (n) filtered = filtered.filter(r => r.name.includes(n) || r.alias.includes(n));
+
+  // 存档状态筛选
+  if (archived === '已存档') filtered = filtered.filter(r => r.archived === true);
+  else if (archived === '未存档') filtered = filtered.filter(r => !r.archived);
+
+  state.rows = filtered;
+  renderRows();
+  toast('info', `查询完成，命中 ${state.rows.length} 条`);
+});
+$('#btn-reset').addEventListener('click', () => {
+  $('#q-name').value = '';
+  ['q-ind', 'q-city', 'q-coop', 'q-bd', 'q-cm', 'q-archived'].forEach(id => { $('#' + id).selectedIndex = 0; });
+  state.rows = SEED.slice();
+  renderRows();
+});
+
+/* ---------- 侧栏 / tab 装饰交互 ---------- */
+$$('.nav-i').forEach(b => b.addEventListener('click', () => {
+  $$('.nav-i').forEach(x => x.setAttribute('aria-current', 'false'));
+  b.setAttribute('aria-current', 'true');
+}));
+$$('.sub button').forEach(b => b.addEventListener('click', () => {
+  $$('.sub button').forEach(x => x.setAttribute('aria-current', 'false'));
+  b.setAttribute('aria-current', 'true');
+}));
+/* ---------- 页面切换 ---------- */
+function goPage(name) {
+  $$('.page').forEach(p => p.classList.toggle('on', p.dataset.page === name));
+  const tabKey = name === 'approvalDetail' ? 'approval' : name;
+  $$('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.go === tabKey)));
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+$$('.tab').forEach(b => b.addEventListener('click', () => goPage(b.dataset.go)));
+
+/* ==========================================================
+   客户跟进申请工单
+   ========================================================== */
+const APPROVALS = [
+  ['CFA-20260917-0005', '安克创新', 'VASC-DMC', 'KA', '刘紫依,王梦琦,边诗朦', '审批通过', '刘紫依', '林焕滨', '2026-09-17', 60, '未合作'],
+  ['CFA-20260917-0004', '乐斐香港有限公司', 'MTC', 'LT', '梅润骞,沈乐怡', '审批中', '梅润骞', '沈树帆', '2026-09-17', 0, '未合作'],
+  ['CFA-20260917-0003', '乐斐香港有限公司', 'VASC-ECP', 'LT', '梅润骞,沈乐怡', '审批通过', '梅润骞', '林焕滨', '2026-09-17', 12, '合作中'],
+  ['CFA-20260917-0002', '乐斐香港有限公司', 'VASC-CMC', 'LT', '梅润骞,沈乐怡', '审批通过', '梅润骞', '林焕滨', '2026-09-17', 12, '合作中'],
+  ['CFA-20260917-0001', '乐斐香港有限公司', 'VASC-DMC', 'LT', '梅润骞,沈乐怡', '审批通过', '梅润骞', '林焕滨', '2026-09-17', 12, '合作中'],
+  ['CFA-20260916-0009', '陕西艺洋众辉文化传播有限公司', 'MTC', 'LT', 'UniAgency,刘欣鑫', '审批通过', '刘欣鑫', '沈树帆', '2026-09-16', 34, '沉寂半年内'],
+  ['CFA-20260916-0008', '深圳市光合医疗器械有限公司', 'MTC', 'LT', 'UniAgency', '审批中', '张鼎立', '沈树帆', '2026-09-16', 0, '未合作'],
+  ['CFA-20260916-0007', 'bitunix', 'VASC-DMC', 'LT', '陈彦帆', '审批通过', '陈彦帆', '林焕滨', '2026-09-16', 21, '合作中'],
+  ['CFA-20260916-0006', '长安汽车', 'PAC', 'LT', '谭亦男', '审批中', '谭亦男', '罗格', '2026-09-16', 0, '未合作'],
+  ['CFA-20260916-0005', '倍轻松Breo', 'PAC', 'LT', '谭亦男', '审批中', '谭亦男', '罗格', '2026-09-16', 0, '沉寂大于一年'],
+  ['CFA-20260916-0004', '伊利', 'PAC', 'LT', '谭亦男', '审批中', '谭亦男', '罗格', '2026-09-16', 0, '未合作'],
+  ['CFA-20260916-0003', 'partnerboost', 'PAC', 'LT', '聂皓锏,范思诚', '审批通过', '范思诚', '罗格', '2026-09-16', 45, '合作中'],
+  ['CFA-20260916-0002', '深圳市正浩创新科技有限公司', 'VASC-ECP', 'LT', '李芊芊,谭天宇,边诗朦', '审批通过', '边诗朦', '林焕滨', '2026-09-16', 8, '合作中'],
+  ['CFA-20260916-0001', '华宇矿机', 'MTC', 'LT', '龚培杰', '审批中', '朱煜超', '沈树帆', '2026-09-16', 0, '未合作'],
+].map(r => ({
+  no: r[0], cust: r[1], biz: r[2], lv: r[3], follower: r[4], st: r[5],
+  applicant: r[6], approver: r[7], at: r[8], idleDays: r[9], coop: r[10],
+  reason: '已通过朋友介绍对接到该客户市场部负责人，目前处于需求沟通阶段，对方对我们的投放能力较认可。',
+  plan: '本周内出一版投放方案，下周约现场拜访，争取月内跑通首笔测试预算。',
+  rejReason: '',
+}));
+
+let apRows = APPROVALS.slice();
+let apCur = 0;
+
+function renderApprovals() {
+  const q = {
+    no: $('#ap-q-no').value.trim(),
+    name: $('#ap-q-name').value.trim(),
+    biz: $('#ap-q-biz').value,
+    lv: $('#ap-q-lv').value,
+    st: $('#ap-q-st').value,
+  };
+  const scope = $('#ap-scope').value;
+  apRows = APPROVALS.filter(r => {
+    if (q.no && !r.no.includes(q.no)) return false;
+    if (q.name && !r.cust.includes(q.name)) return false;
+    if (q.biz && r.biz !== q.biz) return false;
+    if (q.lv && r.lv !== q.lv) return false;
+    if (q.st && r.st !== q.st) return false;
+    if (scope === '待我审批' && r.st !== '审批中') return false;
+    if (scope === '我提交的' && r.applicant !== 'UserName') return false;
+    return true;
+  });
+
+  $('#ap-rows').innerHTML = apRows.map((r, i) => `<tr class="${r.st === '审批中' ? 'pending' : ''}" data-ap="${i}">
+    <td><input class="chk" type="checkbox" data-apchk="${i}" aria-label="选择 ${esc(r.no)}"></td>
+    <td class="mono"><button class="btn link" data-apopen="${i}">${esc(r.no)}</button></td>
+    <td>${esc(r.cust)}</td>
+    <td>${esc(r.biz)}</td>
+    <td>${esc(r.lv)}</td>
+    <td>${esc(r.follower)}</td>
+    <td>${esc(r.st)}</td>
+    <td>${esc(r.applicant)}</td>
+    <td>${esc(r.approver)}</td>
+    <td>${esc(r.st === '审批中' ? '—' : r.reason.slice(0, 12) + '…')}</td>
+    <td>${esc(r.rejReason || '—')}</td>
+    <td class="mono">${esc(r.at)}</td>
+  </tr>`).join('');
+  $('#ap-shown').textContent = apRows.length;
+  $('#ap-all').checked = false;
+}
+
+['ap-q-no', 'ap-q-name'].forEach(id => $('#' + id).addEventListener('input', renderApprovals));
+['ap-q-biz', 'ap-q-lv', 'ap-q-st', 'ap-scope'].forEach(id => $('#' + id).addEventListener('change', renderApprovals));
+$('#btn-ap-refresh').addEventListener('click', () => { renderApprovals(); toast('info', '已刷新工单列表'); });
+
+$('#ap-all').addEventListener('change', e => {
+  $$('[data-apchk]').forEach(c => { c.checked = e.target.checked; });
+});
+
+$('#ap-rows').addEventListener('click', e => {
+  const o = e.target.closest('[data-apopen]');
+  if (o) { openApprovalDetail(+o.dataset.apopen); return; }
+  const tr = e.target.closest('[data-ap]');
+  if (tr && !e.target.closest('.chk')) tr.classList.toggle('sel');
+});
+
+function checkedApprovals() {
+  return $$('[data-apchk]').filter(c => c.checked).map(c => apRows[+c.dataset.apchk]);
+}
+
+function batchApprove(pass) {
+  const picked = checkedApprovals();
+  if (!picked.length) { toast('warn', '请先勾选要处理的工单'); return; }
+  const bad = picked.filter(r => r.st !== '审批中');
+  if (bad.length === picked.length) { toast('warn', '所选工单均非「审批中」，无法处理'); return; }
+  picked.forEach(r => {
+    if (r.st !== '审批中') return;
+    r.st = pass ? '审批通过' : '驳回';
+    if (!pass) r.rejReason = '跟进情况描述不充分，请补充对接人岗位与部门';
+  });
+  renderApprovals();
+  toast('ok', `已${pass ? '通过' : '驳回'} ${picked.filter(r => r.st !== '审批中').length} 条工单`);
+}
+$('#btn-ap-pass').addEventListener('click', () => batchApprove(true));
+$('#btn-ap-reject').addEventListener('click', () => batchApprove(false));
+
+/* ---------- 审批详情 ---------- */
+const FLOW_STEPS = ['驳回', '草稿', '审批中', '审批通过'];
+
+function openApprovalDetail(i) {
+  apCur = i;
+  const r = apRows[i];
+  if (!r) return;
+
+  const idle = r.idleDays === 0 ? '近60天无拜访无提单' : `最近拜访 ${r.idleDays} 天前`;
+  const advice = r.idleDays === 0 || r.coop === '未合作' || r.coop.startsWith('沉寂') ? '通过' : '驳回（现责任BD仍在活跃跟进）';
+  $('#d-advice').textContent = `当前业务的合作状态为：${r.coop}，责任BD：${r.follower.split(',')[0]}，${idle}。审批建议：${advice}。`;
+
+  const at = FLOW_STEPS.indexOf(r.st === '驳回' ? '驳回' : r.st);
+  $('#d-flow').innerHTML = FLOW_STEPS.map((s, k) =>
+    `<span class="stp ${k === at ? 'on' : k < at ? 'done' : ''}">${s}</span>`).join('');
+  $('#d-live').innerHTML = ['正常', '作废'].map((s, k) =>
+    `<span class="stp ${k === 0 ? 'on' : ''}">${s}</span>`).join('');
+
+  $('#d-idx').textContent = i + 1;
+  $('#d-time').textContent = r.at + ' 21:22';
+  $('#d-approver').textContent = r.approver;
+  $('#d-rejreason').textContent = r.rejReason || '—';
+  $('#d-no').textContent = r.no;
+  $('#d-cust').textContent = r.cust;
+  $('#d-biz').textContent = r.biz;
+  $('#d-follower').textContent = r.follower;
+  $('#d-applicant').textContent = r.applicant;
+  $('#d-lv').textContent = r.lv;
+  $('#d-step').textContent = r.reason;
+  $('#d-plan').textContent = r.plan;
+
+  const visits = r.idleDays === 0 ? [] : [
+    [r.at, r.follower.split(',')[0], '现场拜访', '市场部 王总监', '沟通下半年投放预算与结算方式'],
+    ['2026-08-28', r.follower.split(',')[0], '线上会议', '投放负责人 李经理', '演示后台数据能力，对方索要报价'],
+  ];
+  $('#d-visits').innerHTML = visits.map(v => `<tr>${v.map((c, k) =>
+    `<td${k === 0 ? ' class="mono"' : ''}>${esc(c)}</td>`).join('')}</tr>`).join('');
+  $('#d-visits-empty').style.display = visits.length ? 'none' : '';
+
+  const editable = r.st === '审批中';
+  $('#btn-d-pass').disabled = !editable;
+  $('#btn-d-reject').disabled = !editable;
+
+  goPage('approvalDetail');
+}
+
+$('#btn-ap-back').addEventListener('click', () => goPage('approval'));
+$('#btn-d-prev').addEventListener('click', () => { if (apCur > 0) openApprovalDetail(apCur - 1); });
+$('#btn-d-next').addEventListener('click', () => { if (apCur < apRows.length - 1) openApprovalDetail(apCur + 1); });
+
+function decideOne(pass) {
+  const r = apRows[apCur];
+  if (!r || r.st !== '审批中') { toast('warn', '该工单不在「审批中」状态'); return; }
+  r.st = pass ? '审批通过' : '驳回';
+  if (!pass) r.rejReason = '跟进情况描述不充分，请补充对接人岗位与部门';
+  renderApprovals();
+  openApprovalDetail(apCur);
+  toast('ok', pass ? `已通过 ${r.no}，跟进人已加入该客户` : `已驳回 ${r.no}，申请人将收到通知`);
+}
+$('#btn-d-pass').addEventListener('click', () => decideOne(true));
+$('#btn-d-reject').addEventListener('click', () => decideOne(false));
+
+/* ==========================================================
+   客户合并
+   ========================================================== */
+const MERGE_POOL = [
+  { name: '北京星燧网络科技有限公司', no: 'KH-202608001', type: '直客', lv: 'KA', ind: '文娱-中重度游戏', ind2: '', credit: 'A', bd: '张三' },
+  { name: '北京星燧网络科技有限公司(旧)', no: 'KH-202511072', type: '代理', lv: 'LT', ind: '文娱-轻度游戏', ind2: '休闲游戏发行', credit: 'B', bd: '李四' },
+  { name: '广州轻叶互动娱乐有限公司', no: 'KH-202608003', type: '直客', lv: 'GT', ind: '文娱-轻度游戏', ind2: '', credit: 'B', bd: '赵亮' },
+  { name: '深圳墨读数字出版有限公司', no: 'KH-202608004', type: '直客', lv: 'KA', ind: '文娱-阅读', ind2: '', credit: 'A', bd: '刘强' },
+];
+const MG_FIELDS = ['type', 'lv', 'ind', 'ind2', 'credit', 'bd'];
+const MG_CONFLICT = ['type', 'lv', 'ind', 'credit'];
+const mgPick = { old: null, new: null };
+
+function matchCust(q) {
+  const s = q.trim();
+  if (!s) return null;
+  return MERGE_POOL.find(c => c.name.includes(s) || c.no.includes(s)) || null;
+}
+
+function markDiffs() {
+  const a = mgPick.old, b = mgPick.new;
+  MG_CONFLICT.forEach(f => {
+    const el = $('#mg-d-' + f);
+    if (el) el.classList.toggle('on', !!(a && b && a[f] !== b[f]));
+  });
+}
+
+/* 单选：把某一侧的取值批量填入下方保留字段 */
+function applyPick(keep) {
+  const c = mgPick[keep];
+  if (!c) { toast('warn', keep === 'old' ? '请先选择旧客户' : '请先选择新客户'); return; }
+  MG_FIELDS.forEach(f => {
+    const el = $('#mg-r-' + f);
+    if (el) { el.value = c[f] || ''; el.classList.remove('bad'); }
+  });
+  $('#mg-credit-err').classList.remove('on');
+  toast('info', `已按${keep === 'old' ? '旧' : '新'}客户值填充保留字段`);
+}
+
+['old', 'new'].forEach(side => {
+  $('#mg-' + side).addEventListener('input', e => {
+    mgPick[side] = matchCust(e.target.value);
+    $('#mg-' + side + '-err').classList.remove('on');
+    markDiffs();
+  });
+});
+
+$$('input[name="mg-pick"]').forEach(r => r.addEventListener('change', () => applyPick(r.value)));
+
+$('#btn-mg-do').addEventListener('click', () => {
+  let bad = false;
+  if (!mgPick.old) { $('#mg-old-err').classList.add('on'); bad = true; }
+  if (!mgPick.new) { $('#mg-new-err').classList.add('on'); bad = true; }
+  if (bad) { toast('warn', '请先选择旧客户与新客户'); return; }
+  if (mgPick.old.no === mgPick.new.no) { toast('warn', '旧客户与新客户不能是同一个'); return; }
+
+  /* 必填校验：客户类型 / 级别类型 / 所属行业 / 信用等级 */
+  const req = [['type', '客户类型'], ['lv', '客户级别类型'], ['ind', '所属行业'], ['credit', '客户信用等级']];
+  const miss = req.filter(([f]) => !$('#mg-r-' + f).value);
+  req.forEach(([f]) => $('#mg-r-' + f).classList.toggle('bad', !$('#mg-r-' + f).value));
+  $('#mg-credit-err').classList.toggle('on', !$('#mg-r-credit').value);
+  if (miss.length) {
+    $('#mg-r-' + miss[0][0]).scrollIntoView({ block: 'center', behavior: 'smooth' });
+    toast('err', `还有 ${miss.length} 项必填未选择：${miss.map(m => m[1]).join('、')}`);
+    return;
+  }
+
+  const conflicts = MG_CONFLICT.filter(f => mgPick.old[f] !== mgPick.new[f]).length;
+  toast('ok', `已合并：${mgPick.old.no} → ${mgPick.new.no}，保留客户类型「${$('#mg-r-type').value}」、信用等级「${$('#mg-r-credit').value}」`);
+  setTimeout(() => toast('info', `旧客户已置为作废，线索与拜访纪要已迁移${conflicts ? `，${conflicts} 个冲突字段按所选取值写入` : ''}`), 900);
+});
+
+$('#btn-mg-reset').addEventListener('click', () => {
+  mgPick.old = mgPick.new = null;
+  ['old', 'new'].forEach(s => {
+    $('#mg-' + s).value = '';
+    $('#mg-' + s + '-err').classList.remove('on');
+  });
+  MG_FIELDS.forEach(f => {
+    const el = $('#mg-r-' + f);
+    if (el) { el.value = ''; el.classList.remove('bad'); }
+  });
+  $$('input[name="mg-pick"]').forEach(r => { r.checked = false; });
+  $('#mg-credit-err').classList.remove('on');
+  markDiffs();
+  toast('info', '已重置合并表单');
+});
+
+/* ---------- 启动 ---------- */
+renderLeads();
+renderRows();
+renderApprovals();
+step('entry');
+countDone();
+</script>
+
