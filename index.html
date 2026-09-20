@@ -321,6 +321,15 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
 .diff{color:var(--warn);font-size:11.5px;margin-top:4px;display:none}
 .diff.on{display:block}
 .mg-acts{display:flex;gap:10px;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.mgh-note{color:var(--text-3);font-size:12px;font-weight:400;margin-left:10px}
+.mgh-table{min-width:980px}
+.mgh-table .filter-row th{padding:7px 8px;background:var(--surface)}
+.mgh-table .filter-row .inp{height:30px;font-size:12px;font-weight:400}
+.mgh-customer{display:grid;gap:3px;width:100%;padding:0;border:0;background:transparent;color:var(--text);text-align:left;cursor:pointer;font:inherit}
+.mgh-customer strong{font-weight:500}
+.mgh-customer small{color:var(--text-3);font-size:11.5px}
+.mgh-customer:hover strong{color:var(--accent);text-decoration:underline}
+.mgh-foot{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-top:1px solid var(--line);color:var(--text-3);font-size:12px}
 
 @media (max-width:560px){.sim{display:none}}
 @media (max-width:1000px){.mg{grid-template-columns:1fr}.mg-col+.mg-col{border-left:0;border-top:1px solid var(--line);padding-top:18px;margin-top:4px}.pick{padding-top:0;flex-direction:row}.grid3{grid-template-columns:1fr 1fr}}
@@ -357,6 +366,24 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
 .status-cell{display:inline-flex;align-items:center;gap:5px}.status-cell::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--ok)}
 .status-cell.warn::before{background:var(--warn)}.status-cell.muted::before{background:var(--text-3)}
 @media (max-width:900px){.detail-shell{grid-template-columns:1fr}.detail-nav{position:static;display:flex;overflow-x:auto}.detail-nav a{white-space:nowrap}.detail-grid{grid-template-columns:1fr 1fr}.detail-text-grid{grid-template-columns:1fr}}
+/* ---------- 合并历史 ---------- */
+.detail-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.merge-history-entry{height:27px;padding:0 10px;border:1px solid var(--accent);border-radius:var(--r);background:var(--surface);color:var(--accent);font-size:11.5px;font-weight:500}
+.merge-history-entry:hover{background:var(--accent-weak)}
+.merge-history-entry b{display:inline-grid;place-items:center;min-width:17px;height:17px;padding:0 4px;margin-left:4px;border-radius:9px;background:var(--accent);color:#fff;font-size:10px}
+.merge-history-modal{width:min(1180px,96vw)!important;max-width:min(1180px,96vw)!important}
+.mh-summary{display:flex;align-items:center;gap:30px;padding:14px 20px;background:var(--surface-2);border-bottom:1px solid var(--line);color:var(--text-2);font-size:12.5px;flex-wrap:wrap}
+.mh-summary b{margin-left:5px;color:var(--text);font-size:16px}.mh-summary .mono{font-size:14px}
+.mh-tabs{display:flex;align-items:center;gap:0;padding:0 20px;border-bottom:1px solid var(--line)}
+.mh-tab{height:42px;padding:0 14px;border:0;border-bottom:2px solid transparent;background:transparent;color:var(--text-2);font-size:12.5px}
+.mh-tab.on{color:var(--accent);border-bottom-color:var(--accent)}
+.mh-note{padding:11px 20px;border-bottom:1px solid var(--line);color:var(--text-3);font-size:12px}
+.mh-table{min-width:980px}.mh-table th,.mh-table td{padding:12px 14px;font-size:12px;vertical-align:middle}
+.mh-customer{display:grid;gap:2px}.mh-customer strong{font-weight:600}.mh-customer small{color:var(--text-3);font-family:var(--mono)}
+.mh-current{margin-left:5px;color:var(--accent);font-size:11px;font-weight:400}
+.mh-role{display:inline-block;padding:2px 7px;border-radius:3px;background:var(--accent-weak);color:var(--accent)}
+.mh-role.source{background:var(--danger-weak);color:var(--danger)}
+.mh-empty{padding:34px;text-align:center;color:var(--text-3)}
 </style>
 <div class="app">
 <div class="pane">
@@ -690,6 +717,32 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
             </div>
           </div>
         </div>
+
+        <div class="blk" style="margin-top:12px">
+          <div class="blk-t">合并历史记录<span class="mgh-note">双击客户名称可进入客户详情</span></div>
+          <div class="tblwrap">
+            <table class="mgh-table">
+              <thead>
+                <tr>
+                  <th style="width:25%">合并客户（新客户）</th>
+                  <th style="width:25%">被合并客户（旧客户）</th>
+                  <th style="width:12%">操作人</th>
+                  <th style="width:20%">操作时间</th>
+                  <th style="width:18%">合并批次号</th>
+                </tr>
+                <tr class="filter-row">
+                  <th><input class="inp" id="mgh-q-new" list="mgh-customer-options" placeholder="搜索新客户名称或编号"></th>
+                  <th><input class="inp" id="mgh-q-old" list="mgh-customer-options" placeholder="搜索旧客户名称或编号"></th>
+                  <th><select class="sel" id="mgh-q-operator"><option value="">全部操作人</option></select></th><th></th>
+                  <th><button class="btn sm" id="btn-mgh-reset">重置筛选</button></th>
+                </tr>
+              </thead>
+              <tbody id="mgh-rows"></tbody>
+            </table>
+          </div>
+          <datalist id="mgh-customer-options"></datalist>
+          <div class="mgh-foot"><span id="mgh-count">共 0 条</span><span>客户与批次信息均为历史快照</span></div>
+        </div>
       </div>
     </main>
   </div>
@@ -1011,6 +1064,35 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
     <div class="mhead"><h3 id="t-detail">客户详情</h3><button class="x" data-close="m-detail" aria-label="关闭">✕</button></div>
     <div class="mbody" id="d-body"></div>
     <div class="mfoot"><button class="btn" data-close="m-detail">关闭</button></div>
+  </div>
+</div>
+
+<!-- ===== 5b. 合并历史 ===== -->
+<div class="mask" id="m-merge-history" role="dialog" aria-modal="true" aria-labelledby="t-merge-history" style="z-index:70">
+  <div class="modal merge-history-modal">
+    <div class="mhead">
+      <h3 id="t-merge-history">合并历史</h3>
+      <span class="hint" id="mh-customer"></span>
+      <button class="x" data-close="m-merge-history" aria-label="关闭">✕</button>
+    </div>
+    <div class="mh-summary">
+      <span>参与批次 <b>3</b></span><span>作为合并方 <b>2</b></span><span>作为被合并方 <b>1</b></span>
+      <span>最近合并 <b class="mono">2026-08-04 15:36</b></span>
+    </div>
+    <div class="mh-tabs" id="mh-tabs" role="tablist">
+      <button class="mh-tab on" data-mh-filter="all">全部 3</button>
+      <button class="mh-tab" data-mh-filter="target">作为合并方 2</button>
+      <button class="mh-tab" data-mh-filter="source">作为被合并方 1</button>
+    </div>
+    <div class="mh-note">合并方（新客户）：本次合并中保留的客户，承接对方的线索、拜访纪要与业务数据；被合并方（旧客户）：本次合并中置为存档的客户。</div>
+    <div class="mbody" style="padding:0;min-height:270px">
+      <div class="tblwrap"><table class="mh-table">
+        <thead><tr><th>合并批次号</th><th>合并时间</th><th>本客户角色</th><th>合并方（新客户）</th><th>被合并方（旧客户）</th><th>操作人</th></tr></thead>
+        <tbody id="mh-rows"></tbody>
+      </table></div>
+      <div class="mh-empty" id="mh-empty" style="display:none">暂无符合条件的合并记录</div>
+    </div>
+    <div class="mfoot"><span class="left" id="mh-count">共 3 个合并批次</span><button class="btn" data-close="m-merge-history">关闭</button></div>
   </div>
 </div>
 
@@ -1352,7 +1434,9 @@ function showDetail(r) {
   const t = (heads, row, compact = false) => `<div class="tblwrap"><table class="detail-table${compact ? ' compact' : ''}"><thead><tr>${heads.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody><tr>${row.map(v => `<td>${v}</td>`).join('')}</tr></tbody></table></div>`;
   const tm = (heads, rows, compact = false) => `<div class="tblwrap"><table class="detail-table${compact ? ' compact' : ''}"><thead><tr>${heads.map(h => `<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(row => `<tr>${row.map(v => `<td>${v}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
   const field = (name, value) => `<dl class="detail-field"><dt>${name}</dt><dd>${value}</dd></dl>`;
+  state.detailCustomer = r;
   $('#t-detail').textContent = `客户详情 · ${r.name}`;
+  $('#mh-customer').textContent = `${r.name} · ${r.no}`;
   $('#d-body').innerHTML = `
     <div class="detail-summary">
       <div><h3>${esc(r.name)}</h3><div class="meta">客户别名：${esc(r.alias || '—')}　客户编号：${esc(r.no)}</div></div>
@@ -1369,7 +1453,7 @@ function showDetail(r) {
       </nav>
       <div class="detail-content">
         <section class="detail-section" id="d-basic">
-          <div class="detail-section-title">基础信息</div><div class="detail-section-body"><div class="detail-grid">
+          <div class="detail-section-title detail-title-row"><span>基础信息</span><button class="merge-history-entry" data-merge-history>合并历史 <b>3</b></button></div><div class="detail-section-body"><div class="detail-grid">
             ${field('客户状态', `<span class="status-cell">${esc(r.coop)}</span>`)}
             ${field('MTC 类型的客户状态', '<span class="status-cell">合作中</span>')}
             ${field('PAC 类型的客户状态', '<span class="status-cell muted">未合作</span>')}
@@ -1495,6 +1579,12 @@ function showDetail(r) {
 }
 
 $('#d-body').addEventListener('click', e => {
+  const mergeHistory = e.target.closest('[data-merge-history]');
+  if (mergeHistory) {
+    renderMergeHistory('all');
+    open('m-merge-history');
+    return;
+  }
   const tab = e.target.closest('[data-dtab]');
   if (tab) {
     const block = tab.closest('.detail-tab-block');
@@ -1507,6 +1597,32 @@ $('#d-body').addEventListener('click', e => {
     const row = state.rows.find(x => x.no === edit.dataset.edit);
     if (row) { close('m-detail'); openEdit(row); }
   }
+});
+
+
+function renderMergeHistory(filter = 'all') {
+  const r = state.detailCustomer || state.rows[0];
+  if (!r) return;
+  const records = [
+    { batch:'MG-2026-0031', time:'2026-08-04 15:36', role:'target', target:[r.name,r.no,true], source:[`${r.name}（旧）`,'KH-202511072',false], operator:r.by || '张三' },
+    { batch:'MG-2026-0018', time:'2026-06-12 10:08', role:'target', target:[r.name,r.no,true], source:['星燚网络科技（北京）有限公司','KH-202503044',false], operator:'李运辰' },
+    { batch:'MG-2026-0009', time:'2026-04-09 17:22', role:'source', target:['星燚互娱（上海）网络科技有限公司','KH-202601015',false], source:[r.name,r.no,true], operator:'王芳' },
+  ];
+  const shown = filter === 'all' ? records : records.filter(x => x.role === filter);
+  const customer = ([name,no,current]) => `<div class="mh-customer"><strong>${esc(name)}${current ? '<span class="mh-current">本客户</span>' : ''}</strong><small>${esc(no)}</small></div>`;
+  $('#mh-rows').innerHTML = shown.map(x => `<tr>
+    <td class="mono">${x.batch}</td><td class="mono">${x.time}</td>
+    <td><span class="mh-role${x.role === 'source' ? ' source' : ''}">${x.role === 'target' ? '合并方' : '被合并方'}</span></td>
+    <td>${customer(x.target)}</td><td>${customer(x.source)}</td><td>${esc(x.operator)}</td>
+  </tr>`).join('');
+  $('#mh-empty').style.display = shown.length ? 'none' : '';
+  $('#mh-count').textContent = `共 ${shown.length} 个合并批次`;
+  $$('#mh-tabs [data-mh-filter]').forEach(x => x.classList.toggle('on', x.dataset.mhFilter === filter));
+}
+
+$('#mh-tabs').addEventListener('click', e => {
+  const tab = e.target.closest('[data-mh-filter]');
+  if (tab) renderMergeHistory(tab.dataset.mhFilter);
 });
 
 /* ---------- 状态查询 ---------- */
@@ -2734,9 +2850,57 @@ const MERGE_POOL = [
   { name: '广州轻叶互动娱乐有限公司', no: 'KH-202608003', type: '直客', lv: 'GT', ind: '文娱-轻度游戏', ind2: '', credit: 'B', bd: '赵亮' },
   { name: '深圳墨读数字出版有限公司', no: 'KH-202608004', type: '直客', lv: 'KA', ind: '文娱-阅读', ind2: '', credit: 'A', bd: '刘强' },
 ];
+const MERGE_HISTORY = [
+  { newName:'北京星燧网络科技有限公司', newNo:'KH-202608001', oldName:'北京星燧网络科技有限公司（旧）', oldNo:'KH-202511072', operator:'张三', time:'2026-08-04 15:36', batch:'MG-2026-0031' },
+  { newName:'北京星燧网络科技有限公司', newNo:'KH-202608001', oldName:'星燧网络科技（北京）有限公司', oldNo:'KH-202503044', operator:'李运辰', time:'2026-06-12 10:08', batch:'MG-2026-0018' },
+  { newName:'星燧互娱（上海）网络科技有限公司', newNo:'KH-202601015', oldName:'北京星燧网络科技有限公司', oldNo:'KH-202608001', operator:'王芳', time:'2026-04-09 17:22', batch:'MG-2026-0009' },
+];
 const MG_FIELDS = ['type', 'lv', 'ind', 'ind2', 'credit', 'bd'];
 const MG_CONFLICT = ['type', 'lv', 'ind', 'credit'];
 const mgPick = { old: null, new: null };
+
+function mergeHistoryCustomer(no, name) {
+  const found = state.rows.find(c => c.no === no) || MERGE_POOL.find(c => c.no === no);
+  if (found && found.alias !== undefined) return found;
+  const source = found || {};
+  return {
+    no, name, alias: name.replace(/[（(].*?[）)]/g, ''),
+    ind: source.ind || '文娱-中重度游戏', type: source.type || '直客',
+    country: '中国', city: name.includes('上海') ? '上海' : '北京',
+    coop: no === 'KH-202511072' ? '未合作' : '合作中', cls: source.lv === 'LT' ? 'c' : 'a',
+    bd: source.bd || '张三', cm: '李明', by: 'UserName', at: '2026-08-04', archived: false,
+    biz: ['MTC', 'PAC'], industry: source.ind || '文娱-中重度游戏', coopStatus: '合作中'
+  };
+}
+
+function renderAdminMergeHistory() {
+  const newQ = $('#mgh-q-new').value.trim().toLowerCase();
+  const oldQ = $('#mgh-q-old').value.trim().toLowerCase();
+  const operatorQ = $('#mgh-q-operator').value;
+  const rows = MERGE_HISTORY.filter(r =>
+    (!newQ || `${r.newName} ${r.newNo}`.toLowerCase().includes(newQ)) &&
+    (!oldQ || `${r.oldName} ${r.oldNo}`.toLowerCase().includes(oldQ)) &&
+    (!operatorQ || r.operator === operatorQ)
+  );
+  $('#mgh-rows').innerHTML = rows.length ? rows.map(r => `
+    <tr>
+      <td><button class="mgh-customer" data-mgh-no="${esc(r.newNo)}" data-mgh-name="${esc(r.newName)}" title="双击进入客户详情"><strong>${esc(r.newName)}</strong><small class="mono">${esc(r.newNo)}</small></button></td>
+      <td><button class="mgh-customer" data-mgh-no="${esc(r.oldNo)}" data-mgh-name="${esc(r.oldName)}" title="双击进入客户详情"><strong>${esc(r.oldName)}</strong><small class="mono">${esc(r.oldNo)}</small></button></td>
+      <td>${esc(r.operator)}</td><td>${esc(r.time)}</td><td class="mono">${esc(r.batch)}</td>
+    </tr>`).join('') : '<tr><td colspan="5"><div class="empty"><b>暂无匹配记录</b><span>请调整新客户或旧客户搜索条件</span></div></td></tr>';
+  $('#mgh-count').textContent = `共 ${rows.length} 条`;
+  const options = new Map();
+  MERGE_HISTORY.forEach(r => {
+    options.set(r.newNo, r.newName);
+    options.set(r.oldNo, r.oldName);
+  });
+  $('#mgh-customer-options').innerHTML = [...options].map(([no, name]) => `<option value="${esc(name)}">${esc(no)}</option><option value="${esc(no)}">${esc(name)}</option>`).join('');
+  const operatorSelect = $('#mgh-q-operator');
+  const selectedOperator = operatorSelect.value;
+  const operators = [...new Set(MERGE_HISTORY.map(r => r.operator))];
+  operatorSelect.innerHTML = '<option value="">全部操作人</option>' + operators.map(name => `<option value="${esc(name)}">${esc(name)}</option>`).join('');
+  operatorSelect.value = selectedOperator;
+}
 
 function matchCust(q) {
   const s = q.trim();
@@ -2774,6 +2938,20 @@ function applyPick(keep) {
 
 $$('input[name="mg-pick"]').forEach(r => r.addEventListener('change', () => applyPick(r.value)));
 
+['mgh-q-new', 'mgh-q-old'].forEach(id => $('#' + id).addEventListener('input', renderAdminMergeHistory));
+$('#mgh-q-operator').addEventListener('change', renderAdminMergeHistory);
+$('#btn-mgh-reset').addEventListener('click', () => {
+  $('#mgh-q-new').value = '';
+  $('#mgh-q-old').value = '';
+  $('#mgh-q-operator').value = '';
+  renderAdminMergeHistory();
+});
+$('#mgh-rows').addEventListener('dblclick', e => {
+  const customer = e.target.closest('[data-mgh-no]');
+  if (!customer) return;
+  showDetail(mergeHistoryCustomer(customer.dataset.mghNo, customer.dataset.mghName));
+});
+
 $('#btn-mg-do').addEventListener('click', () => {
   let bad = false;
   if (!mgPick.old) { $('#mg-old-err').classList.add('on'); bad = true; }
@@ -2793,6 +2971,16 @@ $('#btn-mg-do').addEventListener('click', () => {
   }
 
   const conflicts = MG_CONFLICT.filter(f => mgPick.old[f] !== mgPick.new[f]).length;
+  const now = new Date();
+  const pad = n => String(n).padStart(2, '0');
+  const time = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  const nextBatch = Math.max(...MERGE_HISTORY.map(r => Number(r.batch.split('-').pop()) || 0)) + 1;
+  MERGE_HISTORY.unshift({
+    newName: mgPick.new.name, newNo: mgPick.new.no,
+    oldName: mgPick.old.name, oldNo: mgPick.old.no,
+    operator: 'UserName', time, batch: `MG-${now.getFullYear()}-${String(nextBatch).padStart(4, '0')}`
+  });
+  renderAdminMergeHistory();
   toast('ok', `已合并：${mgPick.old.no} → ${mgPick.new.no}，保留客户类型「${$('#mg-r-type').value}」、信用等级「${$('#mg-r-credit').value}」`);
   setTimeout(() => toast('info', `旧客户已置为作废，线索与拜访纪要已迁移${conflicts ? `，${conflicts} 个冲突字段按所选取值写入` : ''}`), 900);
 });
@@ -2817,7 +3005,7 @@ $('#btn-mg-reset').addEventListener('click', () => {
 renderLeads();
 renderRows();
 renderApprovals();
+renderAdminMergeHistory();
 step('entry');
 countDone();
 </script>
-
