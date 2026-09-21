@@ -137,11 +137,12 @@ button{font:inherit;color:inherit;cursor:pointer}
 .cascade-selects{display:grid;grid-template-columns:1fr 1fr;gap:6px;min-width:0}
 .cascade-selects .sel{min-width:0}
 .cascade-selects.single{grid-template-columns:1fr}.cascade-hint{display:flex;align-items:center;height:30px;padding:0 9px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface-2);color:var(--text-3);font-size:11.5px;white-space:nowrap}
-.filter-template-tabs{display:flex;align-items:flex-end;gap:2px;min-height:36px;padding:0 8px;border-bottom:1px solid var(--line);overflow-x:auto;background:var(--surface-2)}
-.filter-template-tab{display:inline-flex;align-items:center;height:36px;margin-bottom:-1px;border:1px solid transparent;border-bottom-color:var(--line);border-radius:var(--r) var(--r) 0 0;background:transparent;white-space:nowrap;overflow:hidden}
-.filter-template-tab>button:first-child{height:100%;padding:0 11px;border:0;background:transparent;color:var(--text-2);font-size:12px;cursor:pointer}
-.filter-template-tab.on{border-color:var(--line);border-bottom-color:var(--surface);background:var(--surface)}.filter-template-tab.on>button:first-child{color:var(--accent);font-weight:600}
-.filter-template-tab .tab-del{height:22px;width:24px;margin-right:4px;border:0;border-radius:3px;background:transparent;color:var(--text-3);cursor:pointer}.filter-template-tab .tab-del:hover{color:var(--danger);background:var(--danger-weak)}
+.filter-template-tabs{display:flex;align-items:center;gap:6px;padding:0 14px 10px;overflow-x:auto}
+.filter-template-label{color:var(--text-3);font-size:11.5px;white-space:nowrap;margin-right:2px}
+.filter-template-tab{display:inline-flex;align-items:center;height:30px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface);white-space:nowrap;overflow:hidden}
+.filter-template-tab>button:first-child{height:100%;padding:0 10px;border:0;background:transparent;color:var(--text-2);font-size:12px;cursor:pointer}
+.filter-template-tab.on{border-color:var(--accent);background:var(--accent-weak)}.filter-template-tab.on>button:first-child{color:var(--accent)}
+.filter-template-tab .tab-del{height:100%;width:27px;border:0;border-left:1px solid var(--line);background:transparent;color:var(--text-3);cursor:pointer}.filter-template-tab .tab-del:hover{color:var(--danger);background:var(--danger-weak)}
 .fbtns{display:grid;gap:5px;justify-items:end}
 label.lbl{display:block;margin-bottom:5px;color:var(--text-2);font-size:12.5px}
 label.lbl.req::before{content:"*";color:var(--danger);margin-right:3px}
@@ -451,7 +452,6 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
       </div>
 
       <div class="page on" data-page="list">
-      <div class="filter-template-tabs" id="filter-template-tabs" role="tablist" aria-label="高级筛选模板"></div>
       <section class="card" style="margin-bottom:12px">
         <div class="filter">
           <label class="f wide-label"><span>客户名称/客户别名</span><input class="inp" id="q-name" list="customer-name-options" placeholder="请输入客户名称/客户别名搜索并选择"></label>
@@ -469,6 +469,7 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
           <button class="btn sm" id="btn-reset">↺ 重置</button>
           <button class="btn link" id="btn-adv-toggle" style="font-size:12px">▽ 高级筛选</button>
         </div>
+        <div class="filter-template-tabs" id="filter-template-tabs"></div>
         <div class="adv-filter" id="adv-panel" style="display:none">
           <div class="adv-header">
             <div style="display:flex;align-items:center;gap:8px;flex:1">
@@ -681,6 +682,22 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
                   <option value="">请选择客户信用等级</option><option>未评级</option><option>E级</option><option>D级</option><option>C级</option><option>B级</option><option>A级</option><option>S级</option>
                 </select>
                 <div class="err" id="mg-credit-err">请选择客户信用等级</div>
+              </div>
+              <div class="mg-f">
+                <label class="req">客户类型</label>
+                <select class="sel" id="mg-type">
+                  <option value="">请选择客户类型</option><option>直客</option><option>代理</option>
+                </select>
+                <div class="err" id="mg-type-err">请选择客户类型</div>
+              </div>
+              <div class="mg-f">
+                <label class="req">所属行业</label>
+                <select class="sel" id="mg-industry">
+                  <option value="">请选择所属行业</option>
+                  <option>文娱-轻度游戏</option><option>文娱-中重度游戏</option><option>文娱-社交及影音娱乐</option><option>文娱-工具</option><option>文娱-阅读</option><option>文娱-金融</option><option>文娱-其他</option>
+                  <option>消费-电商平台</option><option>消费-跨境卖家</option><option>消费-行业品牌</option>
+                </select>
+                <div class="err" id="mg-industry-err">请选择所属行业</div>
               </div>
 
             </div>
@@ -2579,8 +2596,9 @@ function savePresets() { localStorage.setItem(PRESETS_KEY, JSON.stringify(preset
 
 function renderPresetTabs() {
   const box = $('#filter-template-tabs');
-  box.innerHTML = `<span class="filter-template-tab${activePresetIndex < 0 ? ' on' : ''}"><button role="tab" aria-selected="${activePresetIndex < 0}" data-preset-base>全部客户</button></span>` +
-    presets.map((p, i) => `<span class="filter-template-tab${activePresetIndex === i ? ' on' : ''}"><button role="tab" aria-selected="${activePresetIndex === i}" data-preset-tab="${i}" title="切换到筛选模板：${esc(p.name)}">${esc(p.name)} <small>${p.conditions.length}</small></button><button class="tab-del" data-del-preset-tab="${i}" title="删除模板「${esc(p.name)}」" aria-label="删除模板「${esc(p.name)}」">×</button></span>`).join('');
+  box.innerHTML = `<span class="filter-template-label">已保存模板</span>
+    <span class="filter-template-tab${activePresetIndex < 0 ? ' on' : ''}"><button data-preset-base>全部客户</button></span>` +
+    presets.map((p, i) => `<span class="filter-template-tab${activePresetIndex === i ? ' on' : ''}"><button data-preset-tab="${i}" title="应用筛选模板：${esc(p.name)}">${esc(p.name)} <small>${p.conditions.length}</small></button><button class="tab-del" data-del-preset-tab="${i}" title="删除模板「${esc(p.name)}」" aria-label="删除模板「${esc(p.name)}」">×</button></span>`).join('');
 }
 
 function loadPresetTab(index) {
@@ -2953,12 +2971,17 @@ function applyPick(keep) {
   $('#mg-' + side).addEventListener('input', e => {
     mgPick[side] = matchCust(e.target.value);
     $('#mg-' + side + '-err').classList.remove('on');
+    if (side === 'new') {
+      $('#mg-type').value = mgPick.new?.type || '';
+      $('#mg-industry').value = mgPick.new?.ind || '';
+      ['type','industry'].forEach(f=>{$('#mg-'+f).classList.remove('bad');$('#mg-'+f+'-err').classList.remove('on')});
+    }
     markDiffs();
   });
 });
 
 $$('input[name="mg-pick"]').forEach(r => r.addEventListener('change', () => applyPick(r.value)));
-$('#mg-credit').addEventListener('change',()=>{$('#mg-credit').classList.remove('bad');$('#mg-credit-err').classList.remove('on')});
+['credit','type','industry'].forEach(f=>$('#mg-'+f).addEventListener('change',()=>{$('#mg-'+f).classList.remove('bad');$('#mg-'+f+'-err').classList.remove('on')}));
 
 ['mgh-q-new','mgh-q-old'].forEach(id=>$('#'+id).addEventListener('input',renderAdminMergeHistory));
 $('#mgh-q-operator').addEventListener('change',renderAdminMergeHistory);
@@ -2974,11 +2997,14 @@ $('#btn-mg-do').addEventListener('click', () => {
 
   const keep=document.querySelector('input[name="mg-pick"]:checked')?.value;
   if (!keep) { toast('warn', '请选择取旧客户值或取新客户值'); return; }
-  const credit=$('#mg-credit').value;
-  if (!credit) {
-    $('#mg-credit').classList.add('bad');
-    $('#mg-credit-err').classList.add('on');
-    toast('warn', '请选择客户信用等级');
+  const credit=$('#mg-credit').value, type=$('#mg-type').value, industry=$('#mg-industry').value;
+  const missing=[];
+  if(!credit) missing.push(['credit','客户信用等级']);
+  if(!type) missing.push(['type','客户类型']);
+  if(!industry) missing.push(['industry','所属行业']);
+  if(missing.length){
+    missing.forEach(([f])=>{$('#mg-'+f).classList.add('bad');$('#mg-'+f+'-err').classList.add('on')});
+    toast('warn',`请选择${missing.map(x=>x[1]).join('和')}`);
     return;
   }
   const now=new Date(), pad=n=>String(n).padStart(2,'0');
@@ -2986,7 +3012,7 @@ $('#btn-mg-do').addEventListener('click', () => {
   const nextBatch=Math.max(...MERGE_HISTORY.map(r=>Number(r.batch.split('-').pop())||0))+1;
   MERGE_HISTORY.unshift({newName:mgPick.new.name,newNo:mgPick.new.no,oldName:mgPick.old.name,oldNo:mgPick.old.no,operator:'UserName',time,batch:`MG-${now.getFullYear()}-${String(nextBatch).padStart(4,'0')}`});
   renderAdminMergeHistory();
-  toast('ok', `已合并：${mgPick.old.no} → ${mgPick.new.no}，信用等级为「${credit}」，采用${keep==='old'?'旧':'新'}客户资料`);
+  toast('ok', `已合并：${mgPick.old.no} → ${mgPick.new.no}，客户类型「${type}」、所属行业「${industry}」、信用等级「${credit}」`);
   setTimeout(() => toast('info', '旧客户已置为作废，相关客户数据已完成归并'), 900);
 });
 
@@ -2997,9 +3023,7 @@ $('#btn-mg-reset').addEventListener('click', () => {
     $('#mg-' + s + '-err').classList.remove('on');
   });
   $$('input[name="mg-pick"]').forEach(r => { r.checked = false; });
-  $('#mg-credit').value='';
-  $('#mg-credit').classList.remove('bad');
-  $('#mg-credit-err').classList.remove('on');
+  ['credit','type','industry'].forEach(f=>{$('#mg-'+f).value='';$('#mg-'+f).classList.remove('bad');$('#mg-'+f+'-err').classList.remove('on')});
   markDiffs();
   toast('info', '已重置合并表单');
 });
