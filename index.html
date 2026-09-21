@@ -699,6 +699,10 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
                 </select>
                 <div class="err" id="mg-industry-err">请选择所属行业</div>
               </div>
+              <div class="mg-f">
+                <label>行业（自定义）</label>
+                <input class="inp" id="mg-industry-custom" maxlength="50" placeholder="请输入自定义行业">
+              </div>
 
             </div>
             <datalist id="merge-customer-options"></datalist>
@@ -2974,6 +2978,7 @@ function applyPick(keep) {
     if (side === 'new') {
       $('#mg-type').value = mgPick.new?.type || '';
       $('#mg-industry').value = mgPick.new?.ind || '';
+      $('#mg-industry-custom').value = mgPick.new?.ind2 || '';
       ['type','industry'].forEach(f=>{$('#mg-'+f).classList.remove('bad');$('#mg-'+f+'-err').classList.remove('on')});
     }
     markDiffs();
@@ -3024,6 +3029,7 @@ $('#btn-mg-reset').addEventListener('click', () => {
   });
   $$('input[name="mg-pick"]').forEach(r => { r.checked = false; });
   ['credit','type','industry'].forEach(f=>{$('#mg-'+f).value='';$('#mg-'+f).classList.remove('bad');$('#mg-'+f+'-err').classList.remove('on')});
+  $('#mg-industry-custom').value='';
   markDiffs();
   toast('info', '已重置合并表单');
 });
