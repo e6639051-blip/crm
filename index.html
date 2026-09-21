@@ -132,6 +132,16 @@ button{font:inherit;color:inherit;cursor:pointer}
 .cond-row.bad-row{border-color:var(--danger);background:var(--danger-weak)}
 .cond-row .row-err{grid-column:1/-1;color:var(--danger);font-size:11.5px;display:none}
 .cond-row.bad-row .row-err{display:block}
+.cascade-field{grid-template-columns:96px minmax(0,1fr)}
+.cascade-field>span{white-space:nowrap}
+.cascade-selects{display:grid;grid-template-columns:1fr 1fr;gap:6px;min-width:0}
+.cascade-selects .sel{min-width:0}
+.cascade-selects.single{grid-template-columns:1fr}.cascade-hint{display:flex;align-items:center;height:30px;padding:0 9px;border:1px solid var(--line-2);border-radius:var(--r);background:var(--surface-2);color:var(--text-3);font-size:11.5px;white-space:nowrap}
+.filter-template-tabs{display:flex;align-items:flex-end;gap:2px;min-height:36px;padding:0 8px;border-bottom:1px solid var(--line);overflow-x:auto;background:var(--surface-2)}
+.filter-template-tab{display:inline-flex;align-items:center;height:36px;margin-bottom:-1px;border:1px solid transparent;border-bottom-color:var(--line);border-radius:var(--r) var(--r) 0 0;background:transparent;white-space:nowrap;overflow:hidden}
+.filter-template-tab>button:first-child{height:100%;padding:0 11px;border:0;background:transparent;color:var(--text-2);font-size:12px;cursor:pointer}
+.filter-template-tab.on{border-color:var(--line);border-bottom-color:var(--surface);background:var(--surface)}.filter-template-tab.on>button:first-child{color:var(--accent);font-weight:600}
+.filter-template-tab .tab-del{height:22px;width:24px;margin-right:4px;border:0;border-radius:3px;background:transparent;color:var(--text-3);cursor:pointer}.filter-template-tab .tab-del:hover{color:var(--danger);background:var(--danger-weak)}
 .fbtns{display:grid;gap:5px;justify-items:end}
 label.lbl{display:block;margin-bottom:5px;color:var(--text-2);font-size:12.5px}
 label.lbl.req::before{content:"*";color:var(--danger);margin-right:3px}
@@ -170,6 +180,7 @@ label.lbl.req::before{content:"*";color:var(--danger);margin-right:3px}
 table{width:100%;border-collapse:collapse;font:400 12.5px/1.55 var(--sans)}
 th,td{padding:8px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
 th{background:var(--surface-2);color:var(--text-2);font-weight:500;position:sticky;top:0}
+.sort-head{display:inline-flex;align-items:center;gap:5px;padding:0;border:0;background:transparent;color:inherit;font:inherit;cursor:pointer;white-space:nowrap}.sort-head:hover{color:var(--accent)}.sort-head .sort-icon{color:var(--text-3);font-size:11px}.sort-head.on .sort-icon{color:var(--accent)}
 td.mono{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:12px;color:var(--text-2)}
 tbody tr:hover{background:var(--surface-2)}
 tbody tr.fresh{background:var(--ok-weak);animation:pop 2.4s ease-out}
@@ -319,7 +330,7 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
 .stp.done{background:var(--accent-weak);color:var(--accent)}
 
 /* ---------- 客户合并 ---------- */
-.mgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px 24px}
+.mgrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 24px}
 .mg-f{min-width:0}
 .mg-f>label{display:block;color:var(--text-2);font-size:12px;margin-bottom:5px}
 .mg-f>label.req::after{content:"*";color:var(--danger);margin-left:2px}
@@ -343,11 +354,17 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
 .mgh-customer{display:grid;gap:3px;width:100%;padding:0;border:0;background:transparent;color:var(--text);text-align:left;cursor:pointer;font:inherit}
 .mgh-customer strong{font-weight:500}.mgh-customer small{color:var(--text-3);font-size:11.5px}.mgh-customer:hover strong{color:var(--accent);text-decoration:underline}
 .mgh-foot{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-top:1px solid var(--line);color:var(--text-3);font-size:12px}
+.merge-preview{display:grid;grid-template-columns:1fr 54px 1fr;gap:12px;align-items:stretch;margin:18px 0}.merge-card{padding:14px;border:1px solid var(--line);border-radius:var(--r-lg);background:var(--surface-2);min-height:138px}.merge-card.old{border-left:3px solid var(--danger)}.merge-card.new{border-left:3px solid var(--ok)}.merge-card h4{margin:0 0 3px;font-size:13px}.merge-card .meta{color:var(--text-3);font-size:11.5px}.merge-card-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}.merge-card-grid span{display:block;color:var(--text-3);font-size:11px}.merge-card-grid b{display:block;margin-top:2px;color:var(--text);font-size:12px;font-weight:500}.merge-arrow{display:flex;align-items:center;justify-content:center;color:var(--accent);font-size:24px}.merge-empty{display:flex;align-items:center;justify-content:center;height:100%;min-height:108px;color:var(--text-3);font-size:12px}
+.merge-finance{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:12px}.merge-metric{padding:8px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}.merge-metric span{display:block;color:var(--text-3);font-size:10.5px}.merge-metric b{display:block;margin-top:3px;font:600 12px var(--mono);color:var(--text)}.merge-metric b.danger{color:var(--danger)}
+.merge-subtitle{margin:13px 0 6px;color:var(--text-2);font-size:11.5px;font-weight:600}.merge-mini-table{width:100%;font-size:11px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}.merge-mini-table th,.merge-mini-table td{padding:5px 7px;position:static}.merge-mini-table th{font-size:10.5px}.merge-tags{display:flex;flex-wrap:wrap;gap:5px}.merge-tag{display:inline-flex;align-items:center;padding:3px 7px;border-radius:3px;background:var(--accent-weak);color:var(--accent);font-size:11px}.merge-tag.entity{background:var(--surface);border:1px solid var(--line-2);color:var(--text-2)}
+.merge-card.chosen{outline:2px solid var(--accent);outline-offset:2px}
+.merge-follow-wrap{max-width:100%;overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}.merge-follow-table{min-width:860px;width:100%;font-size:10.5px}.merge-follow-table.history{min-width:650px}.merge-follow-table th,.merge-follow-table td{padding:6px 7px;white-space:nowrap;position:static}.merge-follow-table th{font-size:10px}.merge-check{font-size:15px;color:var(--text-3)}.merge-check.yes{color:var(--text)}
+.merge-key-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:8px;margin-top:12px}.merge-key-item{padding:9px 10px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}.merge-key-item span{display:block;color:var(--text-3);font-size:10.5px}.merge-key-item b{display:block;margin-top:3px;color:var(--text);font-size:12px;font-weight:500}.merge-role{display:inline-flex;padding:3px 7px;border-radius:3px;background:var(--surface-3);color:var(--text-2);font-size:11px;font-weight:600}
 
 @media (max-width:560px){.sim{display:none}}
-@media (max-width:1000px){.mg{grid-template-columns:1fr}.mg-col+.mg-col{border-left:0;border-top:1px solid var(--line);padding-top:18px;margin-top:4px}.pick{padding-top:0;flex-direction:row}.grid3{grid-template-columns:1fr 1fr}}
+@media (max-width:1000px){.mg{grid-template-columns:1fr}.mg-col+.mg-col{border-left:0;border-top:1px solid var(--line);padding-top:18px;margin-top:4px}.pick{padding-top:0;flex-direction:row}.grid3,.mgrid{grid-template-columns:1fr 1fr}.merge-preview{grid-template-columns:1fr}.merge-arrow{transform:rotate(90deg)}.merge-card-grid,.merge-finance,.merge-key-grid{grid-template-columns:1fr 1fr}}
 @media (max-width:1280px){.filter{grid-template-columns:repeat(3,minmax(0,1fr))}}
-@media (max-width:820px){.body{grid-template-columns:1fr}.side{display:none}.filter{grid-template-columns:1fr}.f{grid-template-columns:66px minmax(0,1fr)}.filter-acts{justify-content:flex-start}.grid2{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}}
+@media (max-width:820px){.body{grid-template-columns:1fr}.side{display:none}.filter{grid-template-columns:1fr}.f{grid-template-columns:66px minmax(0,1fr)}.filter-acts{justify-content:flex-start}.grid2,.grid3,.mgrid,.merge-key-grid{grid-template-columns:1fr}}
 @media (max-width:820px){.field-config{right:8px;width:min(310px,calc(100vw - 24px))}}
 /* 基础筛选控件统一与“客户名称”输入框等高 */
 .filter>.f{height:30px!important;min-height:30px!important;max-height:30px!important;grid-template-rows:30px!important;align-items:stretch!important}
@@ -434,16 +451,15 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
       </div>
 
       <div class="page on" data-page="list">
+      <div class="filter-template-tabs" id="filter-template-tabs" role="tablist" aria-label="高级筛选模板"></div>
       <section class="card" style="margin-bottom:12px">
         <div class="filter">
           <label class="f wide-label"><span>客户名称/客户别名</span><input class="inp" id="q-name" list="customer-name-options" placeholder="请输入客户名称/客户别名搜索并选择"></label>
           <label class="f"><span>客户类型</span><select class="sel" id="q-type"><option value="">全部</option><option>直客</option><option>代理</option></select></label>
-          <div class="f"><span>客户级别</span><div class="ms" data-ms="q-cls"></div></div>
           <div class="f"><span>所属行业</span><div class="ms" data-ms="q-ind"></div></div>
-          <div class="f"><span>国家/地区</span><div class="ms" data-ms="q-country"></div></div>
-          <div class="f"><span>城市</span><div class="ms" data-ms="q-city"></div></div>
           <div class="f"><span>BD</span><div class="ms" data-ms="q-bd"></div></div>
           <div class="f"><span>CM</span><div class="ms" data-ms="q-cm"></div></div>
+          <div class="f cascade-field"><span>国家/地区/城市</span><div class="cascade-selects" id="q-area-cascade"><select class="sel" id="q-country"><option value="">全部国家/地区</option><option>中国</option><option>美国</option><option>日本</option><option>英国</option><option>德国</option><option>法国</option><option>意大利</option><option>加拿大</option><option>澳大利亚</option><option>巴西</option></select><select class="sel" id="q-city"><option value="">全部城市</option><option>北京</option><option>上海</option><option>广州</option><option>深圳</option><option>杭州</option><option>成都</option><option>武汉</option><option>南京</option><option>重庆</option><option>西安</option></select><span class="cascade-hint" id="q-city-foreign" style="display:none">国外无需选择城市</span></div></div>
           <label class="f"><span>存档</span><select class="sel" id="q-archived">
             <option value="">全部</option><option value="0">未存档</option><option value="1">已存档</option>
           </select></label>
@@ -468,22 +484,11 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
               <button class="btn link" id="btn-clear-cond" style="font-size:12px;color:var(--danger)">🗑 清空条件</button>
             </div>
           </div>
-          <div class="adv-presets-wrap">
-            <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">
-              <span style="color:var(--text-2);font-size:12px">我的筛选模板</span>
-              <select class="sel" id="preset-sel" style="flex:1;max-width:240px;height:26px;font-size:12px">
-                <option value="">请选择模板</option>
-              </select>
-              <button class="btn sm" id="btn-save-preset">💾 保存模板</button>
-              <button class="btn sm" id="btn-rename-preset" disabled>✏️ 重命名</button>
-              <button class="btn sm" id="btn-del-preset" disabled>🗑 删除</button>
-              <span id="preset-list" style="margin-left:2px"></span>
-            </div>
-          </div>
           <div class="adv-body" id="adv-conditions"></div>
           <div class="adv-footer">
             <button class="btn" id="btn-adv-cancel">取消</button>
             <button class="btn" id="btn-adv-reset">重置</button>
+            <button class="btn" id="btn-save-preset">保存模板</button>
             <button class="btn pri" id="btn-adv-ok">确定</button>
           </div>
         </div>
@@ -655,12 +660,12 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
             <div class="mgrid">
               <div class="mg-f">
                 <label>旧客户<span class="sub-t old">(这个是不要的)</span></label>
-                <div class="srch"><input class="inp" id="mg-old" placeholder="搜索客户名称或编号"><span class="ic">⌕</span></div>
+                <div class="srch"><input class="inp" id="mg-old" list="merge-customer-options" placeholder="搜索客户名称或编号"><span class="ic">⌕</span></div>
                 <div class="err" id="mg-old-err">请选择旧客户</div>
               </div>
               <div class="mg-f">
                 <label>新客户<span class="sub-t new">（这个是要保留的）</span></label>
-                <div class="srch"><input class="inp" id="mg-new" placeholder="搜索客户名称或编号"><span class="ic">⌕</span></div>
+                <div class="srch"><input class="inp" id="mg-new" list="merge-customer-options" placeholder="搜索客户名称或编号"><span class="ic">⌕</span></div>
                 <div class="err" id="mg-new-err">请选择新客户</div>
               </div>
               <div class="mg-f">
@@ -670,49 +675,21 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
                   <label><input type="radio" name="mg-pick" value="new"><span>取新客户值</span></label>
                 </div>
               </div>
-
-              <div class="mg-f">
-                <label class="req">客户类型</label>
-                <select class="sel" id="mg-r-type">
-                  <option value="">请选择</option><option>直客</option><option>代理</option>
-                </select>
-                <div class="diff" id="mg-d-type">⚠ 两侧取值不一致，请确认保留哪一边</div>
-              </div>
-              <div class="mg-f">
-                <label class="req">客户级别类型</label>
-                <select class="sel" id="mg-r-lv">
-                  <option value="">请选择</option><option>KA</option><option>GT</option><option>LT</option>
-                </select>
-                <div class="diff" id="mg-d-lv">⚠ 两侧取值不一致，请确认保留哪一边</div>
-              </div>
               <div class="mg-f">
                 <label class="req">客户信用等级</label>
-                <select class="sel" id="mg-r-credit">
-                  <option value="">请选择</option><option>A</option><option>B</option><option>C</option><option>D</option>
+                <select class="sel" id="mg-credit">
+                  <option value="">请选择客户信用等级</option><option>未评级</option><option>E级</option><option>D级</option><option>C级</option><option>B级</option><option>A级</option><option>S级</option>
                 </select>
-                <div class="err" id="mg-credit-err">客户信用等级为必填项</div>
-                <div class="diff" id="mg-d-credit">⚠ 两侧取值不一致，请确认保留哪一边</div>
+                <div class="err" id="mg-credit-err">请选择客户信用等级</div>
               </div>
 
-              <div class="mg-f">
-                <label class="req">所属行业</label>
-                <select class="sel" id="mg-r-ind">
-                  <option value="">请选择</option>
-                  <optgroup label="文娱">
-                    <option>文娱-中重度游戏</option><option>文娱-轻度游戏</option><option>文娱-社交及影音娱乐</option>
-                    <option>文娱-阅读</option><option>文娱-工具</option><option>文娱-金融</option><option>文娱-其他</option>
-                  </optgroup>
-                  <optgroup label="消费">
-                    <option>消费-电商平台</option><option>消费-跨境卖家</option><option>消费-行业品牌</option>
-                  </optgroup>
-                </select>
-                <div class="diff" id="mg-d-ind">⚠ 两侧取值不一致，请确认保留哪一边</div>
-              </div>
-              <div class="mg-f">
-                <label>行业(自定义)</label>
-                <input class="inp" id="mg-r-ind2" placeholder="请输入">
-              </div>
-              <div></div>
+            </div>
+            <datalist id="merge-customer-options"></datalist>
+
+            <div class="merge-preview" id="mg-preview">
+              <div class="merge-card old" id="mg-old-card"><div class="merge-empty">选择被合并客户后展示客户摘要</div></div>
+              <div class="merge-arrow">→</div>
+              <div class="merge-card new" id="mg-new-card"><div class="merge-empty">选择合并客户后展示客户摘要</div></div>
             </div>
 
             <div class="mg-acts">
@@ -1045,6 +1022,18 @@ tr.sel{outline:2px solid var(--accent);outline-offset:-2px}
   </div>
 </div>
 
+<div class="mask" id="m-save-preset" role="dialog" aria-modal="true" aria-labelledby="t-save-preset" style="z-index:70">
+  <div class="modal slim">
+    <div class="mhead"><h3 id="t-save-preset">保存筛选模板</h3><button class="x" data-close="m-save-preset" aria-label="关闭">✕</button></div>
+    <div class="mbody">
+      <label class="lbl req" for="preset-name-input">模板名称</label>
+      <input class="inp" id="preset-name-input" maxlength="20" placeholder="请输入模板名称（最多20个字符）">
+      <div class="err" id="preset-name-error">请输入模板名称</div>
+    </div>
+    <div class="mfoot"><button class="btn" data-close="m-save-preset">取消</button><button class="btn pri" id="btn-preset-name-ok">确定</button></div>
+  </div>
+</div>
+
 <!-- ===== 5. 客户详情 ===== -->
 <div class="mask right" id="m-detail" role="dialog" aria-modal="true" aria-labelledby="t-detail" style="z-index:45">
   <div class="modal drawer detail-drawer">
@@ -1298,7 +1287,7 @@ const SEED = [
   ['KH-202607008', '南京跨洋供应链管理有限公司', '跨洋供应链', '消费-跨境卖家', '直客', '加拿大', '多伦多', '沉寂大于半年', 'b', '郑伟', '吴十', '吴十', '2026-07-24', false, ['PAC']],
   ['KH-202607009', '重庆麦野品牌管理有限公司', '麦野品牌', '消费-行业品牌', '代理', '澳大利亚', '悉尼', '沉寂半年内', 'b', '冯静', '郑十一', '郑十一', '2026-07-22', false, ['VASC-ECP', 'MAAS']],
   ['KH-202607010', '西安鹿鸣文化创意有限公司', '鹿鸣文创', '文娱-其他', '代理', '巴西', '里约热内卢', '未合作', 'c', '韩冰', '刘十二', '刘十二', '2026-07-20', true, ['MTC']],
-].map((r, i) => ({ no: r[0], name: r[1], alias: r[2], ind: r[3], type: r[4], country: r[5], city: r[6], coop: r[7], cls: r[8], bd: r[9], cm: r[10], by: r[11], at: r[12], archived: r[13], biz: r[14] || [], creditUsd: [850000, 420000, 300000, 960000, 275000, 510000, 680000, 390000, 740000, 225000][i], industry: r[3], coopStatus: r[7], clsLabel: r[8] === 'a' ? 'KA' : r[8] === 'b' ? 'GT' : 'LT' }));
+].map((r, i) => ({ no: r[0], name: r[1], alias: r[2], ind: r[3], type: r[4], country: r[5], city: r[6], coop: r[7], cls: r[8], bd: r[9], cm: r[10], by: r[11], at: r[12], archived: r[13], biz: r[14] || [], creditUsd: [850000, 420000, 300000, 960000, 275000, 510000, 680000, 390000, 740000, 225000][i], mtcLevel:['SKA','KA','GT','LT','KA','GT','SKA','LT','KA','GT'][i], pacLevel:['KA','GT','LT','SKA','GT','LT','KA','SKA','GT','LT'][i], vascLevel:['GT','LT','KA','SKA','LT','KA','GT','SKA','KA','LT'][i], industry: r[3], coopStatus: r[7], clsLabel: r[8] === 'a' ? 'KA' : r[8] === 'b' ? 'GT' : 'LT' }));
 $('#customer-name-options').innerHTML = SEED.map(r => `<option value="${esc(r.name)}">${esc(r.alias)} · ${esc(r.no)}</option>`).join('');
 
 const SIMILAR = [
@@ -1371,6 +1360,9 @@ const LIST_COLUMNS = {
   dmc: { label: 'VASC-DMC合作状态', cell: r => statusCell(bizCoop(r, 'VASC-DMC')) },
   cmc: { label: 'VASC-CMC合作状态', cell: r => statusCell(bizCoop(r, 'VASC-CMC')) },
   ecp: { label: 'VASC-ECP合作状态', cell: r => statusCell(bizCoop(r, 'VASC-ECP')) },
+  mtcLevel: { label: 'MTC客户级别', cell: r => `<span class="pill direct">${esc(r.mtcLevel || 'LT')}</span>` },
+  pacLevel: { label: 'PAC客户级别', cell: r => `<span class="pill direct">${esc(r.pacLevel || 'LT')}</span>` },
+  vascLevel: { label: 'VASC客户级别', cell: r => `<span class="pill direct">${esc(r.vascLevel || 'LT')}</span>` },
   ind: { label: '所属行业', cell: r => esc(r.ind) },
   country: { label: '国家/地区', cell: r => esc(r.country) },
   city: { label: '城市', cell: r => esc(r.city) },
@@ -1378,11 +1370,17 @@ const LIST_COLUMNS = {
   cm: { label: 'CM', cell: r => esc(r.cm || '—') },
   archived: { label: '存档', cell: r => `<span class="archive-tag${r.archived ? ' on' : ''}">${r.archived ? '已存档' : '未存档'}</span>` },
 };
-const DEFAULT_LIST_COLUMNS = ['creditUsd', 'type', 'coop', 'mtc', 'pac', 'dmc', 'cmc', 'ecp', 'ind', 'country', 'city', 'bd', 'cm', 'archived'];
+const DEFAULT_LIST_COLUMNS = ['creditUsd', 'type', 'coop', 'mtc', 'pac', 'dmc', 'cmc', 'ecp', 'mtcLevel', 'pacLevel', 'vascLevel', 'ind', 'country', 'city', 'bd', 'cm', 'archived'];
 let visibleListColumns = JSON.parse(localStorage.getItem('crm-list-columns') || 'null') || DEFAULT_LIST_COLUMNS.slice();
 visibleListColumns = visibleListColumns.filter(key => LIST_COLUMNS[key]);
 if (!visibleListColumns.length) visibleListColumns = DEFAULT_LIST_COLUMNS.slice();
 let draftListColumns = visibleListColumns.slice();
+let listSort = { key:'', direction:'asc' };
+
+function sortableHeader(label,key){
+  const active=listSort.key===key, icon=active?(listSort.direction==='asc'?'↑':'↓'):'↕';
+  return `<button class="sort-head${active?' on':''}" data-list-sort="${key}" title="点击切换升序/降序"><span>${label}</span><span class="sort-icon">${icon}</span></button>`;
+}
 
 function statusCell(value) {
   const cls = value === '合作中' ? 'a' : value === '未合作' ? 'c' : 'b';
@@ -1390,7 +1388,7 @@ function statusCell(value) {
 }
 
 function renderFieldConfig() {
-  const fixedFields = ['客户名称/客户别名', '编号', '客户级别', '创建时间'];
+  const fixedFields = ['客户名称/客户别名', '编号', '创建时间'];
   $('#field-config-fixed').innerHTML = fixedFields.map(label =>
     `<div class="field-config-row fixed"><span class="drag">⠿</span><input type="checkbox" checked disabled><span>${label} <small class="lock">固定</small></span></div>`
   ).join('');
@@ -1431,20 +1429,35 @@ $('#btn-field-apply').addEventListener('click', () => {
 
 function renderRows(freshNo) {
   $('#customer-head').innerHTML = `<th style="width:34px"><input class="chk" type="checkbox" aria-label="全选"></th><th>编号</th><th>客户名称/客户别名</th>` +
-    visibleListColumns.map(key => `<th>${LIST_COLUMNS[key].label}</th>`).join('') +
-    '<th>客户级别</th><th>创建时间</th><th>操作</th>';
-  $('#rows').innerHTML = state.rows.map(r => `
+    visibleListColumns.map(key => `<th>${key==='creditUsd'?sortableHeader(LIST_COLUMNS[key].label,key):LIST_COLUMNS[key].label}</th>`).join('') +
+    `<th>${sortableHeader('创建时间','at')}</th><th>操作</th>`;
+  const viewRows=state.rows.slice();
+  if(listSort.key){
+    viewRows.sort((a,b)=>{
+      const av=listSort.key==='creditUsd'?Number(a.creditUsd||0):String(a[listSort.key]||'');
+      const bv=listSort.key==='creditUsd'?Number(b.creditUsd||0):String(b[listSort.key]||'');
+      const result=av>bv?1:av<bv?-1:0;
+      return listSort.direction==='asc'?result:-result;
+    });
+  }
+  $('#rows').innerHTML = viewRows.map(r => `
     <tr${r.no === freshNo ? ' class="fresh"' : ''}>
       <td><input class="chk" type="checkbox" aria-label="选择 ${esc(r.name)}"></td>
       <td class="mono">${esc(r.no)}</td>
       <td><div class="customer-name-cell"><span>${esc(r.name)}</span><small>${esc(r.alias || '—')}</small></div></td>
       ${visibleListColumns.map(key => `<td>${LIST_COLUMNS[key].cell(r)}</td>`).join('')}
-      <td>${esc(r.clsLabel)}</td>
       <td class="mono">${esc(r.at)}</td>
       <td><button class="btn link" data-edit="${esc(r.no)}">编辑</button> <button class="btn link" data-detail="${esc(r.no)}">详情</button></td>
     </tr>`).join('');
   $('#total').textContent = 40 + state.rows.length;
 }
+$('#customer-head').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-list-sort]');
+  if(!btn)return;
+  const key=btn.dataset.listSort;
+  listSort=listSort.key===key?{key,direction:listSort.direction==='asc'?'desc':'asc'}:{key,direction:'asc'};
+  renderRows();
+});
 $('#rows').addEventListener('click', e => {
   const edit = e.target.closest('[data-edit]');
   if (edit) {
@@ -1492,7 +1505,8 @@ function showDetail(r) {
             ${field('VASC-CMC 类型的客户状态', '<span class="status-cell warn">沉寂半年内</span>')}
             ${field('VASC-ECP 类型的客户状态', '<span class="status-cell muted">未合作</span>')}
             ${field('客户编号', `<span class="mono">${esc(r.no)}</span>`)}
-            ${field('创建者', esc(r.by))}${field('客户级别类型', esc(clsLabel))}
+            ${field('创建者', esc(r.by))}${field('MTC客户级别', esc(r.mtcLevel || 'LT'))}${field('PAC客户级别', esc(r.pacLevel || 'LT'))}
+            ${field('VASC客户级别', esc(r.vascLevel || 'LT'))}
             ${field('客户类型', esc(r.type))}${field('客户名称', esc(r.name))}${field('客户别名', esc(r.alias || '—'))}
             ${field('所属行业', esc(r.ind))}${field('国家/地区', esc(r.country))}${field('城市', esc(r.city))}
             ${field('客户官网', '<a href="#" class="lk">www.customer-example.com</a>')}${field('客户来源', '市场线索')}
@@ -2014,7 +2028,7 @@ function submit(d) {
     const row = {
       no, name: d.name, alias: d.alias, ind: d.ind, type: d.type, country: d.country, city: d.city,
       coop: '未合作', cls: 'c', bd: 'UserName', cm: 'UserName', by: 'UserName', at, time, synced,
-      biz: d.biz ? [d.biz] : [], industry: d.ind, coopStatus: '未合作', clsLabel: 'LT', archived: false,
+      biz: d.biz ? [d.biz] : [], industry: d.ind, coopStatus: '未合作', clsLabel: 'LT', mtcLevel:'LT', pacLevel:'LT', vascLevel:'LT', archived: false,
     };
     state.rows.unshift(row);
 
@@ -2144,6 +2158,7 @@ $('#btn-submit-followup').addEventListener('click', () => {
 
 /* ---------- 高级筛选字段配置 ---------- */
 const STATUS_OPTIONS = ['合作中', '未合作', '沉寂半年内', '沉寂大于半年'];
+const LEVEL_OPTIONS = ['SKA', 'KA', 'GT', 'LT'];
 const ADV_FIELDS = {
   type: { label: '客户类型', type: 'enum', key: 'type', ops: ['contains', 'notContains'], multi: true,
     options: ['直客', '代理'] },
@@ -2154,8 +2169,9 @@ const ADV_FIELDS = {
   dmc: { label: 'VASC-DMC合作状态', type: 'bizStatus', biz: 'VASC-DMC', ops: ['contains', 'notContains'], multi: true, options: STATUS_OPTIONS },
   cmc: { label: 'VASC-CMC合作状态', type: 'bizStatus', biz: 'VASC-CMC', ops: ['contains', 'notContains'], multi: true, options: STATUS_OPTIONS },
   ecp: { label: 'VASC-ECP合作状态', type: 'bizStatus', biz: 'VASC-ECP', ops: ['contains', 'notContains'], multi: true, options: STATUS_OPTIONS },
-  cls: { label: '客户级别', type: 'enum', key: 'clsLabel', ops: ['contains', 'notContains'], multi: true,
-    options: ['KA', 'GT', 'LT'] },
+  mtcLevel: { label: 'MTC客户级别', type: 'enum', key: 'mtcLevel', ops: ['contains', 'notContains'], multi: true, options: LEVEL_OPTIONS },
+  pacLevel: { label: 'PAC客户级别', type: 'enum', key: 'pacLevel', ops: ['contains', 'notContains'], multi: true, options: LEVEL_OPTIONS },
+  vascLevel: { label: 'VASC客户级别', type: 'enum', key: 'vascLevel', ops: ['contains', 'notContains'], multi: true, options: LEVEL_OPTIONS },
   ind: { label: '所属行业', type: 'enum', key: 'ind', ops: ['contains', 'notContains'], multi: true,
     options: ['文娱-轻度游戏', '文娱-中重度游戏', '文娱-社交及影音娱乐', '文娱-工具', '文娱-阅读', '文娱-金融', '文娱-其他', '消费-电商平台', '消费-跨境卖家', '消费-行业品牌'] },
   country: { label: '国家/地区', type: 'enum', key: 'country', ops: ['contains', 'notContains'], multi: true,
@@ -2173,12 +2189,9 @@ const MAX_CONDS_WARN = 10;
 
 /* ---------- 基础筛选 ---------- */
 const BASE_MS = {
-  'q-cls': { label: '客户级别', opts: ['KA', 'GT', 'LT'] },
   'q-ind': { label: '所属行业', opts: ['文娱-轻度游戏', '文娱-中重度游戏', '文娱-社交及影音娱乐', '文娱-工具', '文娱-阅读', '文娱-金融', '文娱-其他', '消费-电商平台', '消费-跨境卖家', '消费-行业品牌'], groups: [
     { label: '文娱', start: 0, end: 7 }, { label: '消费', start: 7, end: 10 }
   ]},
-  'q-country': { label: '国家/地区', opts: ['中国', '美国', '日本', '英国', '德国', '法国', '意大利', '加拿大', '澳大利亚', '巴西'] },
-  'q-city': { label: '城市', opts: ['北京', '上海', '东京', '伦敦', '柏林', '巴黎', '罗马', '多伦多', '悉尼', '里约热内卢'] },
   'q-bd': { label: 'BD', opts: ['张三', '王芳', '赵亮', '刘强', '陈晨', '周杰', '吴涛', '郑伟', '冯静', '韩冰'] },
   'q-cm': { label: 'CM', opts: ['李明', '李四', '王五', '赵六', '钱七', '孙八', '周九', '吴十', '郑十一', '刘十二'] },
 };
@@ -2212,6 +2225,16 @@ function initMS() {
     renderMS(id);
   });
 }
+
+function syncAreaCascade() {
+  const country=$('#q-country'), city=$('#q-city'), hint=$('#q-city-foreign');
+  const foreign=!!country.value && country.value!=='中国';
+  if (foreign) city.value='';
+  city.style.display=foreign?'none':'';
+  city.disabled=!country.value||foreign;
+  hint.style.display=foreign?'flex':'none';
+}
+$('#q-country').addEventListener('change',syncAreaCascade);
 
 document.addEventListener('click', e => {
   const ms = e.target.closest('.ms');
@@ -2258,17 +2281,14 @@ function baseFilter(rows) {
   const type = $('#q-type').value;
   if (type) rows = rows.filter(r => r.type === type);
 
-  const cls = msState['q-cls'];
-  if (cls.length) rows = rows.filter(r => cls.includes(r.clsLabel));
-
   const ind = msState['q-ind'];
   if (ind.length) rows = rows.filter(r => ind.includes(r.ind));
 
-  const country = msState['q-country'];
-  if (country.length) rows = rows.filter(r => country.includes(r.country));
+  const country = $('#q-country').value;
+  if (country) rows = rows.filter(r => r.country === country);
 
-  const city = msState['q-city'];
-  if (city.length) rows = rows.filter(r => city.includes(r.city));
+  const city = $('#q-city').value;
+  if (city) rows = rows.filter(r => r.city === city);
 
   const bd = msState['q-bd'];
   if (bd.length) rows = rows.filter(r => bd.includes(r.bd));
@@ -2293,6 +2313,7 @@ function baseFilterCount() {
   let n = 0;
   if ($('#q-name').value.trim()) n++;
   if ($('#q-type').value) n++;
+  if ($('#q-country').value || $('#q-city').value) n++;
   Object.keys(BASE_MS).forEach(id => { if (msState[id].length) n++; });
   if ($('#q-archived').value) n++;
   return n;
@@ -2524,6 +2545,9 @@ $('#btn-search').addEventListener('click', () => runSearch());
 $('#btn-reset').addEventListener('click', () => {
   $('#q-name').value = '';
   $('#q-type').value = '';
+  $('#q-country').value = '';
+  $('#q-city').value = '';
+  syncAreaCascade();
   Object.keys(BASE_MS).forEach(id => {
     msState[id] = [];
     const w = $(`[data-ms="${id}"]`);
@@ -2537,117 +2561,132 @@ $('#btn-reset').addEventListener('click', () => {
   $('#adv-logic').value = 'all';
   renderConditions();
   $('#btn-adv-toggle').textContent = '▽ 高级筛选';
-  $('#preset-sel').value = '';
-  syncPresetBtns();
+  activePresetIndex = -1;
+  renderPresetTabs();
   state.rows = SEED.slice();
   renderRows();
   toast('info', '已重置全部筛选条件');
 });
 
-/* ---------- 筛选模板 ---------- */
+/* ---------- 筛选模板 Tab ---------- */
 const PRESETS_KEY = 'crm-filter-presets';
-let presets = JSON.parse(localStorage.getItem(PRESETS_KEY) || '[]');
+let presets = JSON.parse(localStorage.getItem(PRESETS_KEY) || '[]')
+  .map(p => ({ ...p, conditions: (p.conditions || []).filter(c => ADV_FIELDS[c.field]) }))
+  .filter(p => p.conditions.length);
+let activePresetIndex = -1;
 
 function savePresets() { localStorage.setItem(PRESETS_KEY, JSON.stringify(presets)); }
 
-function renderPresets() {
-  const sel = $('#preset-sel');
-  const cur = sel.value;
-  sel.innerHTML = '<option value="">请选择模板</option>' +
-    presets.map((p, i) => `<option value="${i}">${esc(p.name)}（${p.conditions.length}项）</option>`).join('');
-  sel.value = cur && presets[+cur] ? cur : '';
-  $('#preset-list').innerHTML = presets.length
-    ? `<span style="color:var(--text-3);font-size:11.5px">已保存 ${presets.length}/${MAX_PRESETS} 个模板，仅本人可见</span>`
-    : '<span style="color:var(--text-3);font-size:11.5px">暂无模板，设置条件后点「保存模板」可快速复用</span>';
-  syncPresetBtns();
+function renderPresetTabs() {
+  const box = $('#filter-template-tabs');
+  box.innerHTML = `<span class="filter-template-tab${activePresetIndex < 0 ? ' on' : ''}"><button role="tab" aria-selected="${activePresetIndex < 0}" data-preset-base>全部客户</button></span>` +
+    presets.map((p, i) => `<span class="filter-template-tab${activePresetIndex === i ? ' on' : ''}"><button role="tab" aria-selected="${activePresetIndex === i}" data-preset-tab="${i}" title="切换到筛选模板：${esc(p.name)}">${esc(p.name)} <small>${p.conditions.length}</small></button><button class="tab-del" data-del-preset-tab="${i}" title="删除模板「${esc(p.name)}」" aria-label="删除模板「${esc(p.name)}」">×</button></span>`).join('');
 }
 
-function syncPresetBtns() {
-  const has = $('#preset-sel').value !== '';
-  $('#btn-rename-preset').disabled = !has;
-  $('#btn-del-preset').disabled = !has;
-}
-
-$('#preset-sel').addEventListener('change', e => {
-  syncPresetBtns();
-  if (e.target.value === '') return;
-  const p = presets[+e.target.value];
+function loadPresetTab(index) {
+  const p = presets[index];
+  if (!p) return;
+  activePresetIndex = index;
   conditions = JSON.parse(JSON.stringify(p.conditions));
-  condSeq = Math.max(0, ...conditions.map(c => c.id));
-  $('#adv-logic').value = p.logic || 'all';
+  appliedConds = JSON.parse(JSON.stringify(p.conditions));
+  appliedLogic = p.logic || 'all';
+  condSeq = Math.max(0, ...conditions.map(c => c.id || 0));
+  $('#adv-logic').value = appliedLogic;
   renderConditions();
-  toast('ok', `已载入模板「${p.name}」，可继续调整后点「确定」`);
+  renderPresetTabs();
+  runSearch(true);
+  toast('ok', `已应用筛选模板「${p.name}」`);
+}
+
+function saveTemplateTab(name) {
+  const currentConditions=conditions.filter(conditionComplete).map(c=>JSON.parse(JSON.stringify(c)));
+  if (!currentConditions.length) return false;
+  const data = {
+    name,
+    logic: $('#adv-logic').value,
+    conditions: currentConditions
+  };
+  const sameName=presets.findIndex(p=>p.name===name);
+  if (sameName>=0) {
+    presets[sameName]=data;
+    activePresetIndex=sameName;
+  } else {
+    if (presets.length >= MAX_PRESETS) {
+      toast('warn', `最多保存 ${MAX_PRESETS} 个筛选模板`);
+      renderPresetTabs();
+      return false;
+    }
+    presets.push(data);
+    activePresetIndex = presets.length - 1;
+  }
+  savePresets();
+  renderPresetTabs();
+  return true;
+}
+
+$('#btn-save-preset').addEventListener('click',()=>{
+  let hasBad=false;
+  conditions.forEach(c=>{c.bad=!!(c.field&&!conditionComplete(c));if(c.bad)hasBad=true});
+  if(hasBad){renderConditions();toast('err','存在未填写筛选值的条件，请补全或删除');return}
+  if(!conditions.some(conditionComplete)){toast('warn','请先设置至少一个有效条件');return}
+  $('#preset-name-input').value=activePresetIndex>=0&&presets[activePresetIndex]?presets[activePresetIndex].name:'';
+  $('#preset-name-input').classList.remove('bad');
+  $('#preset-name-error').classList.remove('on');
+  open('m-save-preset');
+  setTimeout(()=>$('#preset-name-input').focus(),0);
 });
 
-$('#btn-save-preset').addEventListener('click', () => {
-  const active = conditions.filter(conditionComplete);
-  if (!active.length) { toast('warn', '请先设置至少一个有效条件'); return; }
+$('#btn-preset-name-ok').addEventListener('click',()=>{
+  const name=$('#preset-name-input').value.trim();
+  const bad=!name;
+  $('#preset-name-input').classList.toggle('bad',bad);
+  $('#preset-name-error').classList.toggle('on',bad);
+  if(bad)return;
+  if(saveTemplateTab(name)){
+    close('m-save-preset');
+    toast('ok',`筛选模板「${name}」已保存`);
+  }
+});
+$('#preset-name-input').addEventListener('keydown',e=>{if(e.key==='Enter')$('#btn-preset-name-ok').click()});
 
-  const curIdx = $('#preset-sel').value;
-  const defName = curIdx !== '' ? presets[+curIdx].name : '';
-  const name = prompt('请输入模板名称（最多 20 字符，同名将覆盖更新）：', defName);
-  if (name === null) return;
-  const nm = name.trim();
-  if (!nm) { toast('warn', '模板名称不能为空'); return; }
-  if (nm.length > 20) { toast('warn', '模板名称最多 20 字符'); return; }
-
-  const exist = presets.findIndex(p => p.name === nm);
-  const data = { name: nm, logic: $('#adv-logic').value, conditions: JSON.parse(JSON.stringify(active)) };
-
-  if (exist >= 0) {
-    if (!confirm(`模板「${nm}」已存在，是否覆盖更新？`)) return;
-    presets[exist] = data;
+$('#filter-template-tabs').addEventListener('click', e => {
+  const del = e.target.closest('[data-del-preset-tab]');
+  if (del) {
+    const index = +del.dataset.delPresetTab;
+    const p = presets[index];
+    if (!p || !confirm(`确定删除筛选模板「${p.name}」？`)) return;
+    presets.splice(index, 1);
+    if (activePresetIndex === index) {
+      activePresetIndex = -1;
+      conditions = [];
+      appliedConds = [];
+      appliedLogic = 'all';
+      $('#adv-logic').value = 'all';
+      renderConditions();
+      runSearch(true);
+    } else if (activePresetIndex > index) activePresetIndex--;
     savePresets();
-    renderPresets();
-    $('#preset-sel').value = String(exist);
-    syncPresetBtns();
-    toast('ok', `模板「${nm}」已覆盖更新`);
+    renderPresetTabs();
+    toast('info', '筛选模板已删除');
     return;
   }
-
-  if (presets.length >= MAX_PRESETS) {
-    toast('err', `最多保存 ${MAX_PRESETS} 个模板，请先删除不用的模板`);
-    return;
+  const tab = e.target.closest('[data-preset-tab]');
+  if (tab) { loadPresetTab(+tab.dataset.presetTab); return; }
+  if (e.target.closest('[data-preset-base]')) {
+    activePresetIndex = -1;
+    conditions = [];
+    appliedConds = [];
+    appliedLogic = 'all';
+    $('#adv-logic').value = 'all';
+    renderConditions();
+    renderPresetTabs();
+    runSearch(true);
   }
-  presets.push(data);
-  savePresets();
-  renderPresets();
-  $('#preset-sel').value = String(presets.length - 1);
-  syncPresetBtns();
-  toast('ok', `模板「${nm}」已保存`);
-});
-
-$('#btn-rename-preset').addEventListener('click', () => {
-  const idx = $('#preset-sel').value;
-  if (idx === '') return;
-  const p = presets[+idx];
-  const name = prompt('请输入新的模板名称（最多 20 字符）：', p.name);
-  if (name === null) return;
-  const nm = name.trim();
-  if (!nm) { toast('warn', '模板名称不能为空'); return; }
-  if (nm.length > 20) { toast('warn', '模板名称最多 20 字符'); return; }
-  if (presets.some((x, i) => i !== +idx && x.name === nm)) { toast('warn', '已存在同名模板'); return; }
-  p.name = nm;
-  savePresets();
-  renderPresets();
-  $('#preset-sel').value = idx;
-  syncPresetBtns();
-  toast('ok', '模板已重命名');
-});
-
-$('#btn-del-preset').addEventListener('click', () => {
-  const idx = $('#preset-sel').value;
-  if (idx === '') return;
-  const p = presets[+idx];
-  if (!confirm(`确定删除模板「${p.name}」？`)) return;
-  presets.splice(+idx, 1);
-  savePresets();
-  renderPresets();
-  toast('info', '模板已删除');
 });
 
 initMS();
-renderPresets();
+syncAreaCascade();
+renderPresetTabs();
 renderConditions();
 
 /* ---------- 侧栏 / tab 装饰交互 ---------- */
@@ -2833,25 +2872,52 @@ $('#btn-d-reject').addEventListener('click', () => decideOne(false));
    客户合并
    ========================================================== */
 const MERGE_POOL = [
-  { name: '北京星燧网络科技有限公司', no: 'KH-202608001', type: '直客', lv: 'KA', ind: '文娱-中重度游戏', ind2: '', credit: 'A', bd: '张三' },
-  { name: '北京星燧网络科技有限公司(旧)', no: 'KH-202511072', type: '代理', lv: 'LT', ind: '文娱-轻度游戏', ind2: '休闲游戏发行', credit: 'B', bd: '李四' },
-  { name: '广州轻叶互动娱乐有限公司', no: 'KH-202608003', type: '直客', lv: 'GT', ind: '文娱-轻度游戏', ind2: '', credit: 'B', bd: '赵亮' },
-  { name: '深圳墨读数字出版有限公司', no: 'KH-202608004', type: '直客', lv: 'KA', ind: '文娱-阅读', ind2: '', credit: 'A', bd: '刘强' },
+  { name:'北京星燧网络科技有限公司', no:'KH-202608001', type:'直客', mtcLevel:'SKA', pacLevel:'KA', vascLevel:'GT', ind:'文娱-中重度游戏', ind2:'', credit:'A', bd:'张三', cm:'李明', coop:'合作中', creator:'张三', creditLimit:850000, debt:15200, usage:68, business:[['MTC','合作中','张三'],['PAC','未合作','—'],['VASC-DMC','合作中','李运辰'],['VASC-CMC','沉寂半年内','张三'],['VASC-ECP','未合作','—']], followers:['张三（MTC）','李运辰（VASC-DMC）','王芳（PAC）'], entities:['星燧科技（香港）有限公司','北京星燧信息技术有限公司'], counts:[2,5,8,13,3,12] },
+  { name:'北京星燧网络科技有限公司(旧)', no:'KH-202511072', type:'代理', mtcLevel:'KA', pacLevel:'GT', vascLevel:'LT', ind:'文娱-轻度游戏', ind2:'休闲游戏发行', credit:'B', bd:'李四', cm:'王五', coop:'沉寂半年内', creator:'李四', creditLimit:420000, debt:86700, usage:92, business:[['MTC','沉寂半年内','李四'],['PAC','合作中','王五'],['VASC-DMC','未合作','—'],['VASC-CMC','沉寂大于半年','赵亮'],['VASC-ECP','未合作','—']], followers:['李四（MTC）','王五（PAC）','赵亮（VASC-CMC）'], entities:['星燧网络科技（北京）有限公司','星燧互娱（上海）有限公司'], counts:[2,5,8,13,3,12] },
+  { name:'广州轻叶互动娱乐有限公司', no:'KH-202608003', type:'直客', mtcLevel:'GT', pacLevel:'LT', vascLevel:'KA', ind:'文娱-轻度游戏', ind2:'', credit:'B', bd:'赵亮', cm:'王五', coop:'沉寂大于半年', creator:'王五', creditLimit:300000, debt:35600, usage:47, business:[['MTC','沉寂大于半年','赵亮'],['PAC','未合作','—'],['VASC-DMC','合作中','王五'],['VASC-CMC','未合作','—'],['VASC-ECP','合作中','陈晨']], followers:['赵亮（MTC）','王五（VASC-DMC）','陈晨（VASC-ECP）'], entities:['广州轻叶科技有限公司'], counts:[1,3,4,7,2,9] },
+  { name:'深圳墨读数字出版有限公司', no:'KH-202608004', type:'直客', mtcLevel:'KA', pacLevel:'SKA', vascLevel:'SKA', ind:'文娱-阅读', ind2:'', credit:'A', bd:'刘强', cm:'赵六', coop:'合作中', creator:'赵六', creditLimit:960000, debt:0, usage:31, business:[['MTC','合作中','刘强'],['PAC','合作中','赵六'],['VASC-DMC','合作中','刘强'],['VASC-CMC','未合作','—'],['VASC-ECP','合作中','赵六']], followers:['刘强（MTC/VASC-DMC）','赵六（PAC/VASC-ECP）'], entities:['深圳墨读出版有限公司','墨读数字科技（香港）有限公司'], counts:[3,6,5,11,4,15] },
 ];
 const MERGE_HISTORY = [
   { newName:'北京星燧网络科技有限公司', newNo:'KH-202608001', oldName:'北京星燧网络科技有限公司（旧）', oldNo:'KH-202511072', operator:'张三', time:'2026-08-04 15:36', batch:'MG-2026-0031' },
   { newName:'北京星燧网络科技有限公司', newNo:'KH-202608001', oldName:'星燧网络科技（北京）有限公司', oldNo:'KH-202503044', operator:'李运辰', time:'2026-06-12 10:08', batch:'MG-2026-0018' },
   { newName:'星燧互娱（上海）网络科技有限公司', newNo:'KH-202601015', oldName:'北京星燧网络科技有限公司', oldNo:'KH-202608001', operator:'王芳', time:'2026-04-09 17:22', batch:'MG-2026-0009' },
 ];
-const MG_FIELDS = ['type', 'lv', 'ind', 'ind2', 'credit', 'bd'];
-const MG_CONFLICT = ['type', 'lv', 'ind', 'credit'];
+const MERGE_ALIASES = {
+  'KH-202608001':'星燧网络','KH-202511072':'星燧旧客','KH-202608003':'轻叶互动','KH-202608004':'墨读数字'
+};
+const MERGE_BOP_ADV = {
+  'KH-202608001':['ADV-100238','ADV-100516'],'KH-202511072':['ADV-089731','ADV-091205'],'KH-202608003':['ADV-102884'],'KH-202608004':['ADV-105367','ADV-105422']
+};
+const MERGE_HISTORY_FOLLOWERS = {
+  'KH-202608001':['王芳','赵亮'],'KH-202511072':['曾真','马声旺'],'KH-202608003':['李四','陈晨'],'KH-202608004':['周杰','孙八']
+};
 const mgPick = { old: null, new: null };
+$('#merge-customer-options').innerHTML=MERGE_POOL.map(c=>`<option value="${esc(c.name)}">${esc(c.no)} · ${esc(c.bd)}</option><option value="${esc(c.no)}">${esc(c.name)}</option>`).join('');
+
+function renderMergeWorkspace(){
+  const card=(c,role)=>c?`<span class="merge-role">${role==='old'?'旧客户 · 合并后存档':'新客户 · 合并后保留'}</span>
+    <div class="merge-key-grid">
+      <div class="merge-key-item"><span>客户名称</span><b>${esc(c.name)}</b></div>
+      <div class="merge-key-item"><span>客户别名</span><b>${esc(MERGE_ALIASES[c.no]||'—')}</b></div>
+      <div class="merge-key-item"><span>授信额度（美元）</span><b class="mono">${Number(c.creditLimit).toLocaleString('en-US')}</b></div>
+    </div>
+    <div class="merge-subtitle">不同业务线的责任BD</div><table class="merge-mini-table"><thead><tr><th>业务线</th><th>责任BD</th></tr></thead><tbody>${c.business.map(x=>`<tr><td>${esc(x[0])}</td><td>${esc(x[2])}</td></tr>`).join('')}</tbody></table>
+    <div class="merge-subtitle">跟进人</div><div class="merge-tags">${[...new Set(c.followers.map(x=>x.replace(/（.*$/,'')))].map(x=>`<span class="merge-tag">${esc(x)}</span>`).join('')}</div>
+    <div class="merge-subtitle">历史跟进人</div><div class="merge-tags">${(MERGE_HISTORY_FOLLOWERS[c.no]||[]).map(x=>`<span class="merge-tag entity">${esc(x)}</span>`).join('')||'<span class="meta">暂无</span>'}</div>
+    <div class="merge-subtitle">主体名称</div><div class="merge-tags">${c.entities.map(x=>`<span class="merge-tag entity">${esc(x)}</span>`).join('')}</div>
+    <div class="merge-subtitle">BOP广告主ID</div><div class="merge-tags">${(MERGE_BOP_ADV[c.no]||[]).map(x=>`<span class="merge-tag entity mono">${esc(x)}</span>`).join('')||'<span class="meta">暂无</span>'}</div>`:`<div class="merge-empty">选择${role==='old'?'被合并':'合并'}客户后展示客户摘要</div>`;
+  $('#mg-old-card').innerHTML=card(mgPick.old,'old');
+  $('#mg-new-card').innerHTML=card(mgPick.new,'new');
+  const picked=document.querySelector('input[name="mg-pick"]:checked')?.value;
+  $('#mg-old-card').classList.toggle('chosen',picked==='old');
+  $('#mg-new-card').classList.toggle('chosen',picked==='new');
+}
 
 function mergeHistoryCustomer(no, name) {
   const found = state.rows.find(c => c.no === no) || SEED.find(c => c.no === no) || MERGE_POOL.find(c => c.no === no);
   if (found && found.alias !== undefined) return found;
   const source = found || {};
-  return { no, name, alias:name.replace(/[（(].*?[）)]/g,''), ind:source.ind || '文娱-中重度游戏', type:source.type || '直客', country:'中国', city:name.includes('上海') ? '上海' : '北京', coop:no === 'KH-202511072' ? '未合作' : '合作中', cls:source.lv === 'LT' ? 'c' : 'a', clsLabel:source.lv || 'KA', bd:source.bd || '张三', cm:'李明', by:'UserName', at:'2026-08-04', archived:false, biz:['MTC','PAC'], creditUsd:850000 };
+  return { no, name, alias:name.replace(/[（(].*?[）)]/g,''), ind:source.ind || '文娱-中重度游戏', type:source.type || '直客', country:'中国', city:name.includes('上海') ? '上海' : '北京', coop:no === 'KH-202511072' ? '未合作' : '合作中', cls:source.mtcLevel === 'LT' ? 'c' : 'a', clsLabel:source.mtcLevel || 'KA', mtcLevel:source.mtcLevel||'KA', pacLevel:source.pacLevel||'GT', vascLevel:source.vascLevel||'LT', bd:source.bd || '张三', cm:source.cm||'李明', by:'UserName', at:'2026-08-04', archived:false, biz:['MTC','PAC'], creditUsd:850000 };
 }
 
 function renderAdminMergeHistory() {
@@ -2872,23 +2938,15 @@ function matchCust(q) {
 }
 
 function markDiffs() {
-  const a = mgPick.old, b = mgPick.new;
-  MG_CONFLICT.forEach(f => {
-    const el = $('#mg-d-' + f);
-    if (el) el.classList.toggle('on', !!(a && b && a[f] !== b[f]));
-  });
+  renderMergeWorkspace();
 }
 
-/* 单选：把某一侧的取值批量填入下方保留字段 */
+/* 单选：指定合并后采用哪一侧客户资料 */
 function applyPick(keep) {
   const c = mgPick[keep];
   if (!c) { toast('warn', keep === 'old' ? '请先选择旧客户' : '请先选择新客户'); return; }
-  MG_FIELDS.forEach(f => {
-    const el = $('#mg-r-' + f);
-    if (el) { el.value = c[f] || ''; el.classList.remove('bad'); }
-  });
-  $('#mg-credit-err').classList.remove('on');
-  toast('info', `已按${keep === 'old' ? '旧' : '新'}客户值填充保留字段`);
+  renderMergeWorkspace();
+  toast('info', `合并后将采用${keep === 'old' ? '旧' : '新'}客户资料`);
 }
 
 ['old', 'new'].forEach(side => {
@@ -2900,6 +2958,7 @@ function applyPick(keep) {
 });
 
 $$('input[name="mg-pick"]').forEach(r => r.addEventListener('change', () => applyPick(r.value)));
+$('#mg-credit').addEventListener('change',()=>{$('#mg-credit').classList.remove('bad');$('#mg-credit-err').classList.remove('on')});
 
 ['mgh-q-new','mgh-q-old'].forEach(id=>$('#'+id).addEventListener('input',renderAdminMergeHistory));
 $('#mgh-q-operator').addEventListener('change',renderAdminMergeHistory);
@@ -2913,25 +2972,22 @@ $('#btn-mg-do').addEventListener('click', () => {
   if (bad) { toast('warn', '请先选择旧客户与新客户'); return; }
   if (mgPick.old.no === mgPick.new.no) { toast('warn', '旧客户与新客户不能是同一个'); return; }
 
-  /* 必填校验：客户类型 / 级别类型 / 所属行业 / 信用等级 */
-  const req = [['type', '客户类型'], ['lv', '客户级别类型'], ['ind', '所属行业'], ['credit', '客户信用等级']];
-  const miss = req.filter(([f]) => !$('#mg-r-' + f).value);
-  req.forEach(([f]) => $('#mg-r-' + f).classList.toggle('bad', !$('#mg-r-' + f).value));
-  $('#mg-credit-err').classList.toggle('on', !$('#mg-r-credit').value);
-  if (miss.length) {
-    $('#mg-r-' + miss[0][0]).scrollIntoView({ block: 'center', behavior: 'smooth' });
-    toast('err', `还有 ${miss.length} 项必填未选择：${miss.map(m => m[1]).join('、')}`);
+  const keep=document.querySelector('input[name="mg-pick"]:checked')?.value;
+  if (!keep) { toast('warn', '请选择取旧客户值或取新客户值'); return; }
+  const credit=$('#mg-credit').value;
+  if (!credit) {
+    $('#mg-credit').classList.add('bad');
+    $('#mg-credit-err').classList.add('on');
+    toast('warn', '请选择客户信用等级');
     return;
   }
-
-  const conflicts = MG_CONFLICT.filter(f => mgPick.old[f] !== mgPick.new[f]).length;
   const now=new Date(), pad=n=>String(n).padStart(2,'0');
   const time=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`;
   const nextBatch=Math.max(...MERGE_HISTORY.map(r=>Number(r.batch.split('-').pop())||0))+1;
   MERGE_HISTORY.unshift({newName:mgPick.new.name,newNo:mgPick.new.no,oldName:mgPick.old.name,oldNo:mgPick.old.no,operator:'UserName',time,batch:`MG-${now.getFullYear()}-${String(nextBatch).padStart(4,'0')}`});
   renderAdminMergeHistory();
-  toast('ok', `已合并：${mgPick.old.no} → ${mgPick.new.no}，保留客户类型「${$('#mg-r-type').value}」、信用等级「${$('#mg-r-credit').value}」`);
-  setTimeout(() => toast('info', `旧客户已置为作废，线索与拜访纪要已迁移${conflicts ? `，${conflicts} 个冲突字段按所选取值写入` : ''}`), 900);
+  toast('ok', `已合并：${mgPick.old.no} → ${mgPick.new.no}，信用等级为「${credit}」，采用${keep==='old'?'旧':'新'}客户资料`);
+  setTimeout(() => toast('info', '旧客户已置为作废，相关客户数据已完成归并'), 900);
 });
 
 $('#btn-mg-reset').addEventListener('click', () => {
@@ -2940,11 +2996,9 @@ $('#btn-mg-reset').addEventListener('click', () => {
     $('#mg-' + s).value = '';
     $('#mg-' + s + '-err').classList.remove('on');
   });
-  MG_FIELDS.forEach(f => {
-    const el = $('#mg-r-' + f);
-    if (el) { el.value = ''; el.classList.remove('bad'); }
-  });
   $$('input[name="mg-pick"]').forEach(r => { r.checked = false; });
+  $('#mg-credit').value='';
+  $('#mg-credit').classList.remove('bad');
   $('#mg-credit-err').classList.remove('on');
   markDiffs();
   toast('info', '已重置合并表单');
@@ -2955,6 +3009,8 @@ renderLeads();
 renderRows();
 renderApprovals();
 renderAdminMergeHistory();
+renderMergeWorkspace();
 step('entry');
 countDone();
 </script>
+
